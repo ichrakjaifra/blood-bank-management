@@ -1,16 +1,12 @@
 package com.bloodbank.dao;
 
+import com.bloodbank.util.JPAUtil;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Optional;
 
 public abstract class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
-
-    private static final EntityManagerFactory emf =
-            Persistence.createEntityManagerFactory("bloodbank_pu");
 
     private final Class<T> entityClass;
 
@@ -21,7 +17,7 @@ public abstract class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
     }
 
     protected EntityManager getEntityManager() {
-        return emf.createEntityManager();
+        return JPAUtil.getEntityManager();
     }
 
     @Override
@@ -30,8 +26,13 @@ public abstract class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
         try {
             T entity = em.find(entityClass, id);
             return Optional.ofNullable(entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Optional.empty();
         } finally {
-            em.close();
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
     }
 
@@ -42,8 +43,13 @@ public abstract class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
         try {
             return em.createQuery("FROM " + entityClass.getSimpleName())
                     .getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
         } finally {
-            em.close();
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
     }
 
@@ -56,10 +62,14 @@ public abstract class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
             em.getTransaction().commit();
             return savedEntity;
         } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw e;
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erreur lors de la sauvegarde: " + e.getMessage(), e);
         } finally {
-            em.close();
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
     }
 
@@ -71,10 +81,14 @@ public abstract class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
             em.remove(em.contains(entity) ? entity : em.merge(entity));
             em.getTransaction().commit();
         } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw e;
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erreur lors de la suppression: " + e.getMessage(), e);
         } finally {
-            em.close();
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
     }
 
@@ -89,10 +103,14 @@ public abstract class GenericDAOImpl<T, ID> implements GenericDAO<T, ID> {
             }
             em.getTransaction().commit();
         } catch (Exception e) {
-            em.getTransaction().rollback();
-            throw e;
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erreur lors de la suppression: " + e.getMessage(), e);
         } finally {
-            em.close();
+            if (em != null && em.isOpen()) {
+                em.close();
+            }
         }
     }
 }

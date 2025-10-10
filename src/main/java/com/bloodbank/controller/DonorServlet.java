@@ -101,6 +101,7 @@ public class DonorServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/donors");
 
         } catch (Exception e) {
+
             request.setAttribute("error", "Erreur lors de la création: " + e.getMessage());
             request.setAttribute("bloodGroups", BloodGroup.values());
             request.setAttribute("genders", Gender.values());
