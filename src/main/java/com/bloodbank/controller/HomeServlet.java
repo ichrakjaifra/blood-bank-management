@@ -35,9 +35,8 @@ public class HomeServlet extends HttpServlet {
         request.setAttribute("availableDonorsCount", availableDonors);
         request.setAttribute("waitingReceiversCount", waitingReceivers);
         request.setAttribute("satisfiedReceiversCount", satisfiedReceivers);
-        request.setAttribute("todayDonations", 0); // À implémenter
-        request.setAttribute("compatibilityRate", 85); // Exemple
-        request.setAttribute("content", "home-content.jsp");
+        request.setAttribute("todayDonations", 0);
+        request.setAttribute("compatibilityRate", 85);
 
         request.getRequestDispatcher("/WEB-INF/views/home.jsp").forward(request, response);
     }

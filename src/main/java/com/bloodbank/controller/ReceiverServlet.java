@@ -59,9 +59,9 @@ public class ReceiverServlet extends HttpServlet {
         request.setAttribute("receivers", receivers);
         request.setAttribute("bloodGroups", BloodGroup.values());
         request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-        request.setAttribute("pageTitle", "Gestion des Receveurs");
-        request.setAttribute("content", "receiver/list-content.jsp");
-        request.getRequestDispatcher("/WEB-INF/views/template.jsp").forward(request, response);
+
+        // استخدم list.jsp مباشرة
+        request.getRequestDispatcher("/WEB-INF/views/receiver/list.jsp").forward(request, response);
     }
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
@@ -70,8 +70,9 @@ public class ReceiverServlet extends HttpServlet {
         request.setAttribute("bloodGroups", BloodGroup.values());
         request.setAttribute("genders", Gender.values());
         request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-        request.setAttribute("content", "receiver/form-content.jsp");
-        request.getRequestDispatcher("/WEB-INF/views/template.jsp").forward(request, response);
+
+        // استخدم form.jsp مباشرة
+        request.getRequestDispatcher("/WEB-INF/views/receiver/form.jsp").forward(request, response);
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -86,9 +87,9 @@ public class ReceiverServlet extends HttpServlet {
             request.setAttribute("bloodGroups", BloodGroup.values());
             request.setAttribute("genders", Gender.values());
             request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-            request.setAttribute("pageTitle", "Modifier Receveur");
-            request.setAttribute("content", "receiver/form-content.jsp");
-            request.getRequestDispatcher("/WEB-INF/views/template.jsp").forward(request, response);
+
+            // استخدم form.jsp مباشرة
+            request.getRequestDispatcher("/WEB-INF/views/receiver/form.jsp").forward(request, response);
 
         } catch (NumberFormatException e) {
             request.setAttribute("error", "ID invalide");
@@ -105,7 +106,7 @@ public class ReceiverServlet extends HttpServlet {
         try {
             Receiver receiver = extractReceiverFromRequest(request);
             receiverService.save(receiver);
-            request.setAttribute("success", "Receveur créé avec succès");
+            request.getSession().setAttribute("success", "Receveur créé avec succès");
             response.sendRedirect(request.getContextPath() + "/receivers");
 
         } catch (Exception e) {
@@ -113,8 +114,9 @@ public class ReceiverServlet extends HttpServlet {
             request.setAttribute("bloodGroups", BloodGroup.values());
             request.setAttribute("genders", Gender.values());
             request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-            request.setAttribute("content", "receiver/form-content.jsp");
-            request.getRequestDispatcher("/WEB-INF/views/template.jsp").forward(request, response);
+
+            // استخدم form.jsp مباشرة في حالة الخطأ
+            request.getRequestDispatcher("/WEB-INF/views/receiver/form.jsp").forward(request, response);
         }
     }
 
@@ -128,7 +130,7 @@ public class ReceiverServlet extends HttpServlet {
 
             updateReceiverFromRequest(receiver, request);
             receiverService.save(receiver);
-            request.setAttribute("success", "Receveur modifié avec succès");
+            request.getSession().setAttribute("success", "Receveur modifié avec succès");
             response.sendRedirect(request.getContextPath() + "/receivers");
 
         } catch (Exception e) {
@@ -136,8 +138,9 @@ public class ReceiverServlet extends HttpServlet {
             request.setAttribute("bloodGroups", BloodGroup.values());
             request.setAttribute("genders", Gender.values());
             request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-            request.setAttribute("content", "receiver/form-content.jsp");
-            request.getRequestDispatcher("/WEB-INF/views/template.jsp").forward(request, response);
+
+            // استخدم form.jsp مباشرة في حالة الخطأ
+            request.getRequestDispatcher("/WEB-INF/views/receiver/form.jsp").forward(request, response);
         }
     }
 
@@ -147,12 +150,11 @@ public class ReceiverServlet extends HttpServlet {
         try {
             Long id = Long.parseLong(request.getParameter("id"));
             receiverService.delete(id);
-            request.setAttribute("success", "Receveur supprimé avec succès");
+            request.getSession().setAttribute("success", "Receveur supprimé avec succès");
         } catch (Exception e) {
-            request.setAttribute("error", "Erreur lors de la suppression: " + e.getMessage());
+            request.getSession().setAttribute("error", "Erreur lors de la suppression: " + e.getMessage());
         }
-
-        listReceivers(request, response);
+        response.sendRedirect(request.getContextPath() + "/receivers");
     }
 
     private Receiver extractReceiverFromRequest(HttpServletRequest request) {
