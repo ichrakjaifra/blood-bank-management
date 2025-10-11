@@ -21,6 +21,7 @@
         }
         .main-content {
             background-color: #f8f9fa;
+            min-height: 100vh;
         }
         .blood-badge {
             font-size: 0.8em;
@@ -32,14 +33,14 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse bg-danger">
             <div class="position-sticky pt-3">
                 <h4 class="text-white text-center mb-4">
                     <i class="fas fa-tint"></i> Blood Bank
                 </h4>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/home">
+                        <a class="nav-link active" href="${pageContext.request.contextPath}/home">
                             <i class="fas fa-home"></i> Accueil
                         </a>
                     </li>

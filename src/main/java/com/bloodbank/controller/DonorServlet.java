@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class DonorServlet extends HttpServlet {
@@ -27,14 +26,21 @@ public class DonorServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
+        System.out.println("DonorServlet - Action: " + action);
 
-        if ("new".equals(action)) {
-            showCreateForm(request, response);
-        } else if ("edit".equals(action)) {
-            showEditForm(request, response);
-        } else if ("delete".equals(action)) {
-            deleteDonor(request, response);
-        } else {
+        try {
+            if ("new".equals(action)) {
+                showCreateForm(request, response);
+            } else if ("edit".equals(action)) {
+                showEditForm(request, response);
+            } else if ("delete".equals(action)) {
+                deleteDonor(request, response);
+            } else {
+                listDonors(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Erreur: " + e.getMessage());
             listDonors(request, response);
         }
     }
@@ -44,104 +50,117 @@ public class DonorServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
+        System.out.println("DonorServlet POST - Action: " + action);
 
-        if ("create".equals(action)) {
-            createDonor(request, response);
-        } else if ("update".equals(action)) {
-            updateDonor(request, response);
+        try {
+            if ("create".equals(action)) {
+                createDonor(request, response);
+            } else if ("update".equals(action)) {
+                updateDonor(request, response);
+            } else {
+                listDonors(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Erreur: " + e.getMessage());
+            if ("create".equals(action)) {
+                showCreateForm(request, response);
+            } else if ("update".equals(action)) {
+                showEditForm(request, response);
+            } else {
+                listDonors(request, response);
+            }
         }
     }
 
     private void listDonors(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+            List<Donor> donors = donorService.findAll();
+            request.setAttribute("donors", donors);
+            request.setAttribute("bloodGroups", BloodGroup.values());
+            request.setAttribute("pageTitle", "Gestion des Donneurs");
+            request.getRequestDispatcher("/WEB-INF/views/donor/list-content.jsp").forward(request, response);
 
-        List<Donor> donors = donorService.findAll();
-        request.setAttribute("donors", donors);
-        request.setAttribute("bloodGroups", BloodGroup.values());
-        request.getRequestDispatcher("/WEB-INF/views/donor/list.jsp").forward(request, response);
+
+
+        } catch (Exception e) {
+            throw new ServletException("Erreur lors du chargement des donneurs", e);
+        }
     }
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        try {
+            request.setAttribute("bloodGroups", BloodGroup.values());
+            request.setAttribute("genders", Gender.values());
+            request.setAttribute("pageTitle", "Nouveau Donneur");
+            request.setAttribute("content", "donor/form-content.jsp");
 
-        request.setAttribute("bloodGroups", BloodGroup.values());
-        request.setAttribute("genders", Gender.values());
-        request.getRequestDispatcher("/WEB-INF/views/donor/form.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/template.jsp").forward(request, response);
+        } catch (Exception e) {
+            throw new ServletException("Erreur lors du chargement du formulaire", e);
+        }
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         try {
             Long id = Long.parseLong(request.getParameter("id"));
             Donor donor = donorService.findById(id)
-                    .orElseThrow(() -> new ServletException("Donneur non trouvé"));
+                    .orElseThrow(() -> new ServletException("Donneur non trouvé avec l'ID: " + id));
 
             request.setAttribute("donor", donor);
             request.setAttribute("bloodGroups", BloodGroup.values());
             request.setAttribute("genders", Gender.values());
-            request.getRequestDispatcher("/WEB-INF/views/donor/form.jsp").forward(request, response);
+            request.setAttribute("pageTitle", "Modifier Donneur");
+            request.setAttribute("content", "donor/form-content.jsp");
 
+            request.getRequestDispatcher("/WEB-INF/views/template.jsp").forward(request, response);
         } catch (NumberFormatException e) {
-            request.setAttribute("error", "ID invalide");
-            listDonors(request, response);
-        } catch (Exception e) {
-            request.setAttribute("error", e.getMessage());
-            listDonors(request, response);
+            throw new ServletException("ID invalide: " + request.getParameter("id"));
         }
     }
 
     private void createDonor(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         try {
             Donor donor = extractDonorFromRequest(request);
             donorService.save(donor);
-            request.setAttribute("success", "Donneur créé avec succès");
+            request.getSession().setAttribute("success", "Donneur créé avec succès");
             response.sendRedirect(request.getContextPath() + "/donors");
-
         } catch (Exception e) {
-
-            request.setAttribute("error", "Erreur lors de la création: " + e.getMessage());
-            request.setAttribute("bloodGroups", BloodGroup.values());
-            request.setAttribute("genders", Gender.values());
-            request.getRequestDispatcher("/WEB-INF/views/donor/form.jsp").forward(request, response);
+            throw new ServletException("Erreur lors de la création du donneur: " + e.getMessage(), e);
         }
     }
 
     private void updateDonor(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         try {
             Long id = Long.parseLong(request.getParameter("id"));
             Donor donor = donorService.findById(id)
-                    .orElseThrow(() -> new ServletException("Donneur non trouvé"));
+                    .orElseThrow(() -> new ServletException("Donneur non trouvé avec l'ID: " + id));
 
             updateDonorFromRequest(donor, request);
             donorService.save(donor);
-            request.setAttribute("success", "Donneur modifié avec succès");
+            request.getSession().setAttribute("success", "Donneur modifié avec succès");
             response.sendRedirect(request.getContextPath() + "/donors");
 
-        } catch (Exception e) {
-            request.setAttribute("error", "Erreur lors de la modification: " + e.getMessage());
-            request.setAttribute("bloodGroups", BloodGroup.values());
-            request.setAttribute("genders", Gender.values());
-            request.getRequestDispatcher("/WEB-INF/views/donor/form.jsp").forward(request, response);
+        } catch (NumberFormatException e) {
+            throw new ServletException("ID invalide: " + request.getParameter("id"));
         }
     }
 
     private void deleteDonor(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         try {
             Long id = Long.parseLong(request.getParameter("id"));
             donorService.delete(id);
-            request.setAttribute("success", "Donneur supprimé avec succès");
+            request.getSession().setAttribute("success", "Donneur supprimé avec succès");
         } catch (Exception e) {
-            request.setAttribute("error", "Erreur lors de la suppression: " + e.getMessage());
+            request.getSession().setAttribute("error", "Erreur lors de la suppression: " + e.getMessage());
         }
-
-        listDonors(request, response);
+        response.sendRedirect(request.getContextPath() + "/donors");
     }
 
     private Donor extractDonorFromRequest(HttpServletRequest request) {
@@ -165,8 +184,15 @@ public class DonorServlet extends HttpServlet {
             donor.setWeight(Double.parseDouble(weightStr));
         }
 
-        donor.setGender(Gender.valueOf(request.getParameter("gender")));
-        donor.setBloodGroup(BloodGroup.valueOf(request.getParameter("bloodGroup")));
+        String gender = request.getParameter("gender");
+        if (gender != null) {
+            donor.setGender(Gender.valueOf(gender));
+        }
+
+        String bloodGroup = request.getParameter("bloodGroup");
+        if (bloodGroup != null) {
+            donor.setBloodGroup(BloodGroup.valueOf(bloodGroup));
+        }
 
         // Contre-indications médicales
         donor.setHasHepatitisB("on".equals(request.getParameter("hasHepatitisB")));

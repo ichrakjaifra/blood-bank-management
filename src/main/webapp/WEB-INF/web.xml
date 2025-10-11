@@ -15,6 +15,7 @@
     <servlet-mapping>
         <servlet-name>DonorServlet</servlet-name>
         <url-pattern>/donors</url-pattern>
+        <url-pattern>/donors/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -24,6 +25,7 @@
     <servlet-mapping>
         <servlet-name>ReceiverServlet</servlet-name>
         <url-pattern>/receivers</url-pattern>
+        <url-pattern>/receivers/*</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -52,6 +54,6 @@
 
     <!-- Page de bienvenue -->
     <welcome-file-list>
-        <welcome-file>home</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
