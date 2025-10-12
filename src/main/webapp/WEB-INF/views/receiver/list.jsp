@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -51,6 +50,22 @@
         .progress {
             height: 8px;
             border-radius: 10px;
+        }
+        .priority-critical {
+            background-color: #fff5f5 !important;
+            border-left: 4px solid #dc3545;
+        }
+        .priority-urgent {
+            background-color: #fff9e6 !important;
+            border-left: 4px solid #ffc107;
+        }
+        .priority-normal {
+            background-color: #f0f8ff !important;
+            border-left: 4px solid #0dcaf0;
+        }
+        .urgency-badge {
+            font-size: 0.7em;
+            padding: 0.4em 0.8em;
         }
     </style>
 </head>
@@ -105,9 +120,64 @@
                 </div>
             </c:if>
 
+            <!-- إحصائيات الأولوية -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="card border-danger">
+                        <div class="card-body text-center">
+                            <h3 class="text-danger">
+                                <c:set var="criticalCount" value="0" />
+                                <c:forEach var="receiver" items="${receivers}">
+                                    <c:if test="${receiver.medicalUrgency == 'CRITIQUE'}">
+                                        <c:set var="criticalCount" value="${criticalCount + 1}" />
+                                    </c:if>
+                                </c:forEach>
+                                ${criticalCount}
+                            </h3>
+                            <p class="text-muted mb-0">Cas Critiques</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-warning">
+                        <div class="card-body text-center">
+                            <h3 class="text-warning">
+                                <c:set var="urgentCount" value="0" />
+                                <c:forEach var="receiver" items="${receivers}">
+                                    <c:if test="${receiver.medicalUrgency == 'URGENT'}">
+                                        <c:set var="urgentCount" value="${urgentCount + 1}" />
+                                    </c:if>
+                                </c:forEach>
+                                ${urgentCount}
+                            </h3>
+                            <p class="text-muted mb-0">Cas Urgents</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-info">
+                        <div class="card-body text-center">
+                            <h3 class="text-info">
+                                <c:set var="normalCount" value="0" />
+                                <c:forEach var="receiver" items="${receivers}">
+                                    <c:if test="${receiver.medicalUrgency == 'NORMAL'}">
+                                        <c:set var="normalCount" value="${normalCount + 1}" />
+                                    </c:if>
+                                </c:forEach>
+                                ${normalCount}
+                            </h3>
+                            <p class="text-muted mb-0">Cas Normaux</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- محتوى القائمة -->
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="text-dark mb-0">Liste des Receveurs</h3>
+                <div>
+                    <h3 class="text-dark mb-0">Liste des Receveurs</h3>
+                    <small class="text-muted">Triée par priorité (CRITIQUE → URGENT → NORMAL)</small>
+                </div>
                 <a href="${pageContext.request.contextPath}/receivers?action=new" class="btn btn-primary">
                     <i class="fas fa-plus me-2"></i> Nouveau Receveur
                 </a>
@@ -130,15 +200,15 @@
                     <div class="card border-0 shadow-sm">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-striped table-hover align-middle">
+                                <table class="table table-hover align-middle">
                                     <thead class="table-dark">
                                     <tr>
+                                        <th>Priorité</th>
                                         <th>CIN</th>
                                         <th>Nom Complet</th>
                                         <th>Téléphone</th>
                                         <th>Âge</th>
                                         <th>Groupe Sanguin</th>
-                                        <th>Urgence</th>
                                         <th>Statut</th>
                                         <th>Progression</th>
                                         <th class="text-center">Actions</th>
@@ -146,7 +216,31 @@
                                     </thead>
                                     <tbody>
                                     <c:forEach var="receiver" items="${receivers}">
-                                        <tr>
+                                        <tr class="
+                                            <c:choose>
+                                                <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">priority-critical</c:when>
+                                                <c:when test="${receiver.medicalUrgency == 'URGENT'}">priority-urgent</c:when>
+                                                <c:otherwise>priority-normal</c:otherwise>
+                                            </c:choose>">
+                                            <td>
+                                                <c:choose>
+                                                    <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">
+                                                        <span class="badge urgency-badge bg-danger">
+                                                            <i class="fas fa-exclamation-triangle me-1"></i>CRITIQUE
+                                                        </span>
+                                                    </c:when>
+                                                    <c:when test="${receiver.medicalUrgency == 'URGENT'}">
+                                                        <span class="badge urgency-badge bg-warning text-dark">
+                                                            <i class="fas fa-exclamation-circle me-1"></i>URGENT
+                                                        </span>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <span class="badge urgency-badge bg-info">
+                                                            <i class="fas fa-info-circle me-1"></i>NORMAL
+                                                        </span>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </td>
                                             <td class="fw-semibold"><c:out value="${receiver.cin}" /></td>
                                             <td class="fw-semibold"><c:out value="${receiver.fullName}" /></td>
                                             <td>
@@ -169,50 +263,46 @@
                                             </td>
                                             <td>
                                                 <c:choose>
-                                                    <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">
-                                                        <span class="badge bg-danger">CRITIQUE</span>
-                                                    </c:when>
-                                                    <c:when test="${receiver.medicalUrgency == 'URGENT'}">
-                                                        <span class="badge bg-warning">URGENT</span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge bg-info">NORMAL</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <c:choose>
                                                     <c:when test="${receiver.status == 'SATISFAIT'}">
-                                                        <span class="badge bg-success">SATISFAIT</span>
+                                                        <span class="badge bg-success">
+                                                            <i class="fas fa-check me-1"></i>SATISFAIT
+                                                        </span>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <span class="badge bg-secondary">EN ATTENTE</span>
+                                                        <span class="badge bg-secondary">
+                                                            <i class="fas fa-clock me-1"></i>EN ATTENTE
+                                                        </span>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
                                             <td>
-                                                <div class="progress" style="height: 20px;">
-                                                    <div class="progress-bar
-                                                            <c:choose>
-                                                                <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">bg-danger</c:when>
-                                                                <c:when test="${receiver.medicalUrgency == 'URGENT'}">bg-warning</c:when>
-                                                                <c:otherwise>bg-info</c:otherwise>
-                                                            </c:choose>"
-                                                         role="progressbar"
-                                                         style="width: ${(receiver.currentDonationCount / receiver.requiredDonationCount) * 100}%">
-                                                            ${receiver.currentDonationCount}/${receiver.requiredDonationCount}
+                                                <div class="d-flex align-items-center">
+                                                    <div class="progress flex-grow-1 me-2" style="height: 12px;">
+                                                        <div class="progress-bar
+                                                                <c:choose>
+                                                                    <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">bg-danger</c:when>
+                                                                    <c:when test="${receiver.medicalUrgency == 'URGENT'}">bg-warning</c:when>
+                                                                    <c:otherwise>bg-info</c:otherwise>
+                                                                </c:choose>"
+                                                             role="progressbar"
+                                                             style="width: ${(receiver.currentDonationCount / receiver.requiredDonationCount) * 100}%">
+                                                        </div>
                                                     </div>
+                                                    <small class="text-muted">
+                                                            ${receiver.currentDonationCount}/${receiver.requiredDonationCount}
+                                                    </small>
                                                 </div>
                                             </td>
                                             <td class="text-center">
                                                 <div class="btn-group btn-group-sm">
                                                     <a href="${pageContext.request.contextPath}/receivers?action=edit&id=${receiver.id}"
-                                                       class="btn btn-outline-primary">
+                                                       class="btn btn-outline-primary" title="Modifier">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
                                                     <a href="${pageContext.request.contextPath}/receivers?action=delete&id=${receiver.id}"
                                                        class="btn btn-outline-danger"
-                                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce receveur?')">
+                                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce receveur?')"
+                                                       title="Supprimer">
                                                         <i class="fas fa-trash"></i>
                                                     </a>
                                                 </div>
@@ -223,9 +313,48 @@
                                 </table>
                             </div>
 
-                            <!-- Statistiques -->
-                            <div class="mt-3 text-muted text-center">
-                                <small>Total: ${fn:length(receivers)} receveur(s)</small>
+                            <!-- إحصائيات -->
+                            <div class="mt-4 pt-3 border-top">
+                                <div class="row text-center">
+                                    <div class="col-md-3">
+                                        <h5 class="text-primary mb-1">${receivers.size()}</h5>
+                                        <small class="text-muted">Total Receveurs</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h5 class="text-success mb-1">
+                                            <c:set var="satisfiedCount" value="0" />
+                                            <c:forEach var="receiver" items="${receivers}">
+                                                <c:if test="${receiver.status == 'SATISFAIT'}">
+                                                    <c:set var="satisfiedCount" value="${satisfiedCount + 1}" />
+                                                </c:if>
+                                            </c:forEach>
+                                                ${satisfiedCount}
+                                        </h5>
+                                        <small class="text-muted">Satisfaits</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h5 class="text-warning mb-1">
+                                            <c:set var="waitingCount" value="0" />
+                                            <c:forEach var="receiver" items="${receivers}">
+                                                <c:if test="${receiver.status == 'EN_ATTENTE'}">
+                                                    <c:set var="waitingCount" value="${waitingCount + 1}" />
+                                                </c:if>
+                                            </c:forEach>
+                                                ${waitingCount}
+                                        </h5>
+                                        <small class="text-muted">En Attente</small>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <h5 class="text-info mb-1">
+                                            <c:set var="totalNeeded" value="0" />
+                                            <c:forEach var="receiver" items="${receivers}">
+                                                <c:set var="totalNeeded" value="${totalNeeded + receiver.requiredDonationCount}" />
+                                            </c:forEach>
+                                                ${totalNeeded}
+                                        </h5>
+                                        <small class="text-muted">Poches Nécessaires</small>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

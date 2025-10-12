@@ -55,12 +55,22 @@ public class ReceiverServlet extends HttpServlet {
     private void listReceivers(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Receiver> receivers = receiverService.findAll();
+        List<Receiver> receivers = receiverService.findAllByPriority();
         request.setAttribute("receivers", receivers);
         request.setAttribute("bloodGroups", BloodGroup.values());
         request.setAttribute("medicalUrgencies", MedicalUrgency.values());
         request.getRequestDispatcher("/WEB-INF/views/receiver/list.jsp").forward(request, response);
     }
+
+    /*private void listReceivers(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        List<Receiver> receivers = receiverService.findAll();
+        request.setAttribute("receivers", receivers);
+        request.setAttribute("bloodGroups", BloodGroup.values());
+        request.setAttribute("medicalUrgencies", MedicalUrgency.values());
+        request.getRequestDispatcher("/WEB-INF/views/receiver/list.jsp").forward(request, response);
+    }*/
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

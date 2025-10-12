@@ -87,6 +87,24 @@ public class ReceiverDAO extends GenericDAOImpl<Receiver, Long> {
     }
 
     @SuppressWarnings("unchecked")
+    public List<Receiver> findAllByPriority() {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery(
+                            "SELECT r FROM Receiver r LEFT JOIN FETCH r.donations " +
+                                    "ORDER BY " +
+                                    "CASE r.medicalUrgency " +
+                                    "WHEN 'CRITIQUE' THEN 1 " +
+                                    "WHEN 'URGENT' THEN 2 " +
+                                    "WHEN 'NORMAL' THEN 3 " +
+                                    "END, r.registrationDate DESC")
+                    .getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
     public List<Receiver> findByMedicalUrgency(MedicalUrgency urgency) {
         EntityManager em = getEntityManager();
         try {

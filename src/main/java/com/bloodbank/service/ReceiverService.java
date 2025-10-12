@@ -24,6 +24,12 @@ public class ReceiverService {
         return receivers;
     }
 
+    public List<Receiver> findAllByPriority() {
+        List<Receiver> receivers = receiverDAO.findAllByPriority();
+        receivers.forEach(Receiver::updateStatus);
+        return receivers;
+    }
+
     public List<Receiver> findWaitingReceivers() {
         List<Receiver> receivers = receiverDAO.findWaitingReceivers();
         receivers.forEach(Receiver::updateStatus);
