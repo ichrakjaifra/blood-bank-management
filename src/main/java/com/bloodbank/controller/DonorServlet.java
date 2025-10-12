@@ -79,8 +79,6 @@ public class DonorServlet extends HttpServlet {
             List<Donor> donors = donorService.findAll();
             request.setAttribute("donors", donors);
             request.setAttribute("bloodGroups", BloodGroup.values());
-
-            // استخدم list.jsp مباشرة
             request.getRequestDispatcher("/WEB-INF/views/donor/list.jsp").forward(request, response);
 
         } catch (Exception e) {
@@ -93,8 +91,6 @@ public class DonorServlet extends HttpServlet {
         try {
             request.setAttribute("bloodGroups", BloodGroup.values());
             request.setAttribute("genders", Gender.values());
-
-            // استخدم form.jsp مباشرة
             request.getRequestDispatcher("/WEB-INF/views/donor/form.jsp").forward(request, response);
         } catch (Exception e) {
             throw new ServletException("Erreur lors du chargement du formulaire", e);
@@ -111,8 +107,6 @@ public class DonorServlet extends HttpServlet {
             request.setAttribute("donor", donor);
             request.setAttribute("bloodGroups", BloodGroup.values());
             request.setAttribute("genders", Gender.values());
-
-            // استخدم form.jsp مباشرة
             request.getRequestDispatcher("/WEB-INF/views/donor/form.jsp").forward(request, response);
         } catch (NumberFormatException e) {
             throw new ServletException("ID invalide: " + request.getParameter("id"));

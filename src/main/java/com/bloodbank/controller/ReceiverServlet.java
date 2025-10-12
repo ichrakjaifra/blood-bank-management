@@ -59,8 +59,6 @@ public class ReceiverServlet extends HttpServlet {
         request.setAttribute("receivers", receivers);
         request.setAttribute("bloodGroups", BloodGroup.values());
         request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-
-        // استخدم list.jsp مباشرة
         request.getRequestDispatcher("/WEB-INF/views/receiver/list.jsp").forward(request, response);
     }
 
@@ -70,8 +68,6 @@ public class ReceiverServlet extends HttpServlet {
         request.setAttribute("bloodGroups", BloodGroup.values());
         request.setAttribute("genders", Gender.values());
         request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-
-        // استخدم form.jsp مباشرة
         request.getRequestDispatcher("/WEB-INF/views/receiver/form.jsp").forward(request, response);
     }
 
@@ -87,8 +83,6 @@ public class ReceiverServlet extends HttpServlet {
             request.setAttribute("bloodGroups", BloodGroup.values());
             request.setAttribute("genders", Gender.values());
             request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-
-            // استخدم form.jsp مباشرة
             request.getRequestDispatcher("/WEB-INF/views/receiver/form.jsp").forward(request, response);
 
         } catch (NumberFormatException e) {
@@ -114,8 +108,6 @@ public class ReceiverServlet extends HttpServlet {
             request.setAttribute("bloodGroups", BloodGroup.values());
             request.setAttribute("genders", Gender.values());
             request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-
-            // استخدم form.jsp مباشرة في حالة الخطأ
             request.getRequestDispatcher("/WEB-INF/views/receiver/form.jsp").forward(request, response);
         }
     }
@@ -138,8 +130,6 @@ public class ReceiverServlet extends HttpServlet {
             request.setAttribute("bloodGroups", BloodGroup.values());
             request.setAttribute("genders", Gender.values());
             request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-
-            // استخدم form.jsp مباشرة في حالة الخطأ
             request.getRequestDispatcher("/WEB-INF/views/receiver/form.jsp").forward(request, response);
         }
     }
