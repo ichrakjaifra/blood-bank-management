@@ -15,8 +15,8 @@ public class DonationDAO extends GenericDAOImpl<Donation, Long> {
         try {
             return em.createQuery(
                             "SELECT d FROM Donation d " +
-                                    "JOIN FETCH d.donor " +           // ← أضف JOIN FETCH
-                                    "JOIN FETCH d.receiver " +        // ← أضف JOIN FETCH
+                                    "JOIN FETCH d.donor " +
+                                    "JOIN FETCH d.receiver " +
                                     "WHERE d.donor = :donor AND d.isActive = true")
                     .setParameter("donor", donor)
                     .getResultList();
@@ -31,8 +31,8 @@ public class DonationDAO extends GenericDAOImpl<Donation, Long> {
         try {
             return em.createQuery(
                             "SELECT d FROM Donation d " +
-                                    "JOIN FETCH d.donor " +           // ← أضف JOIN FETCH
-                                    "JOIN FETCH d.receiver " +        // ← أضف JOIN FETCH
+                                    "JOIN FETCH d.donor " +
+                                    "JOIN FETCH d.receiver " +
                                     "WHERE d.receiver = :receiver AND d.isActive = true")
                     .setParameter("receiver", receiver)
                     .getResultList();
@@ -47,8 +47,8 @@ public class DonationDAO extends GenericDAOImpl<Donation, Long> {
         try {
             return em.createQuery(
                             "SELECT d FROM Donation d " +
-                                    "JOIN FETCH d.donor " +           // ← أضف JOIN FETCH
-                                    "JOIN FETCH d.receiver " +        // ← أضف JOIN FETCH
+                                    "JOIN FETCH d.donor " +
+                                    "JOIN FETCH d.receiver " +
                                     "WHERE d.isActive = true ORDER BY d.donationDate DESC")
                     .getResultList();
         } finally {
@@ -61,8 +61,8 @@ public class DonationDAO extends GenericDAOImpl<Donation, Long> {
         try {
             Donation donation = (Donation) em.createQuery(
                             "SELECT d FROM Donation d " +
-                                    "JOIN FETCH d.donor " +           // ← أضف JOIN FETCH
-                                    "JOIN FETCH d.receiver " +        // ← أضف JOIN FETCH
+                                    "JOIN FETCH d.donor " +
+                                    "JOIN FETCH d.receiver " +
                                     "WHERE d.donor = :donor AND d.isActive = true")
                     .setParameter("donor", donor)
                     .getSingleResult();
