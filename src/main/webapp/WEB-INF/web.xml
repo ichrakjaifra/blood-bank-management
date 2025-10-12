@@ -38,6 +38,17 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <!-- Servlet de Matching -->
+    <servlet>
+        <servlet-name>MatchingServlet</servlet-name>
+        <servlet-class>com.bloodbank.controller.MatchingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MatchingServlet</servlet-name>
+        <url-pattern>/matching</url-pattern>
+        <url-pattern>/matching/*</url-pattern>
+    </servlet-mapping>
+
     <!-- Filtre d'encodage -->
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>

@@ -14,7 +14,10 @@ public class DonationDAO extends GenericDAOImpl<Donation, Long> {
         EntityManager em = getEntityManager();
         try {
             return em.createQuery(
-                            "SELECT d FROM Donation d WHERE d.donor = :donor AND d.isActive = true")
+                            "SELECT d FROM Donation d " +
+                                    "JOIN FETCH d.donor " +           // ← أضف JOIN FETCH
+                                    "JOIN FETCH d.receiver " +        // ← أضف JOIN FETCH
+                                    "WHERE d.donor = :donor AND d.isActive = true")
                     .setParameter("donor", donor)
                     .getResultList();
         } finally {
@@ -27,7 +30,10 @@ public class DonationDAO extends GenericDAOImpl<Donation, Long> {
         EntityManager em = getEntityManager();
         try {
             return em.createQuery(
-                            "SELECT d FROM Donation d WHERE d.receiver = :receiver AND d.isActive = true")
+                            "SELECT d FROM Donation d " +
+                                    "JOIN FETCH d.donor " +           // ← أضف JOIN FETCH
+                                    "JOIN FETCH d.receiver " +        // ← أضف JOIN FETCH
+                                    "WHERE d.receiver = :receiver AND d.isActive = true")
                     .setParameter("receiver", receiver)
                     .getResultList();
         } finally {
@@ -40,7 +46,10 @@ public class DonationDAO extends GenericDAOImpl<Donation, Long> {
         EntityManager em = getEntityManager();
         try {
             return em.createQuery(
-                            "SELECT d FROM Donation d WHERE d.isActive = true ORDER BY d.donationDate DESC")
+                            "SELECT d FROM Donation d " +
+                                    "JOIN FETCH d.donor " +           // ← أضف JOIN FETCH
+                                    "JOIN FETCH d.receiver " +        // ← أضف JOIN FETCH
+                                    "WHERE d.isActive = true ORDER BY d.donationDate DESC")
                     .getResultList();
         } finally {
             em.close();
@@ -51,7 +60,10 @@ public class DonationDAO extends GenericDAOImpl<Donation, Long> {
         EntityManager em = getEntityManager();
         try {
             Donation donation = (Donation) em.createQuery(
-                            "SELECT d FROM Donation d WHERE d.donor = :donor AND d.isActive = true")
+                            "SELECT d FROM Donation d " +
+                                    "JOIN FETCH d.donor " +           // ← أضف JOIN FETCH
+                                    "JOIN FETCH d.receiver " +        // ← أضف JOIN FETCH
+                                    "WHERE d.donor = :donor AND d.isActive = true")
                     .setParameter("donor", donor)
                     .getSingleResult();
             return Optional.ofNullable(donation);

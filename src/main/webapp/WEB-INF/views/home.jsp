@@ -60,6 +60,12 @@
                             <i class="fas fa-user-injured me-2"></i> Receveurs
                         </a>
                     </li>
+                    <!-- رابط Matching الجديد -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/matching?action=showMatching">
+                            <i class="fas fa-handshake me-2"></i> Matching
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -157,6 +163,11 @@
                                 <a href="${pageContext.request.contextPath}/receivers?action=new"
                                    class="btn btn-primary">
                                     <i class="fas fa-plus"></i> Nouveau Receveur
+                                </a>
+                                <!-- زر Matching الجديد -->
+                                <a href="${pageContext.request.contextPath}/matching?action=showMatching"
+                                   class="btn btn-success">
+                                    <i class="fas fa-handshake"></i> Matching Donneurs/Receveurs
                                 </a>
                                 <a href="${pageContext.request.contextPath}/donors"
                                    class="btn btn-outline-danger">
