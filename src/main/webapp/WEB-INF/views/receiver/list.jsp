@@ -1,110 +1,250 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Bank Management - Gestion des Receveurs</title>
+    <title>Blood Bank - Gestion des Receveurs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        body {
+            background-color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Modern sidebar with red gradient and white text */
         .sidebar {
             min-height: 100vh;
             background: linear-gradient(180deg, #dc3545 0%, #c82333 100%);
+            box-shadow: 2px 0 10px rgba(220, 53, 69, 0.1);
         }
+
         .sidebar .nav-link {
-            color: white;
-            padding: 12px 20px;
-            margin: 4px 0;
-            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            padding: 14px 24px;
+            margin: 6px 12px;
+            border-radius: 10px;
             transition: all 0.3s ease;
+            font-weight: 500;
         }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.2);
+
+        .sidebar .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
             transform: translateX(5px);
         }
+
+        .sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar h4 {
+            padding: 24px 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+
+        /* Clean white main content area */
         .main-content {
             background-color: #f8f9fa;
             min-height: 100vh;
+            padding: 30px;
         }
-        .blood-badge {
-            font-size: 0.8em;
-            padding: 0.3em 0.6em;
-            border-radius: 10px;
+
+        /* Modern card design with subtle shadows */
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            background: #ffffff;
+            overflow: hidden;
         }
+
+        .card-header {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border: none;
+            padding: 20px 24px;
+        }
+
+        /* Red-themed table styling */
         .table th {
-            background-color: #343a40;
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
             color: white;
             font-weight: 600;
             border: none;
+            padding: 16px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
         }
+
         .table td {
+            padding: 16px;
             vertical-align: middle;
+            border-color: #f0f0f0;
         }
-        .card {
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(220, 53, 69, 0.05);
+            transform: scale(1.01);
+            transition: all 0.2s ease;
         }
-        .progress {
-            height: 8px;
-            border-radius: 10px;
+
+        /* Red-themed badges */
+        .blood-badge {
+            font-size: 0.85rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
         }
+
+        .urgency-badge {
+            font-size: 0.75rem;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        /* Priority row styling with red accents */
         .priority-critical {
             background-color: #fff5f5 !important;
             border-left: 4px solid #dc3545;
         }
+
         .priority-urgent {
             background-color: #fff9e6 !important;
             border-left: 4px solid #ffc107;
         }
+
         .priority-normal {
             background-color: #f0f8ff !important;
             border-left: 4px solid #0dcaf0;
         }
-        .urgency-badge {
-            font-size: 0.7em;
-            padding: 0.4em 0.8em;
+
+        /* Modern progress bars */
+        .progress {
+            height: 10px;
+            border-radius: 10px;
+            background-color: #f0f0f0;
+        }
+
+        /* Red-themed buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+        }
+
+        .btn-outline-primary {
+            color: #dc3545;
+            border-color: #dc3545;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            transform: scale(1.05);
+        }
+
+        .btn-outline-danger:hover {
+            transform: scale(1.05);
+        }
+
+        /* Statistics cards with red borders */
+        .stats-card {
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .border-danger {
+            border: 2px solid #dc3545 !important;
+        }
+
+        .border-warning {
+            border: 2px solid #ffc107 !important;
+        }
+
+        .border-info {
+            border: 2px solid #0dcaf0 !important;
+        }
+
+        /* Page header styling */
+        .page-header {
+            border-bottom: 3px solid #dc3545;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            color: #2c3e50;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse bg-danger">
+
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
             <div class="position-sticky pt-3">
-                <h4 class="text-white text-center mb-4">
-                    <i class="fas fa-tint me-2"></i> Blood Bank
+                <h4 class="text-white text-center">
+                    <i class="fas fa-tint me-2"></i>Blood Bank
                 </h4>
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/home">
-                            <i class="fas fa-home me-2"></i> Accueil
+                            <i class="fas fa-home me-2"></i>Accueil
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/donors">
-                            <i class="fas fa-user-plus me-2"></i> Donneurs
+                            <i class="fas fa-user-plus me-2"></i>Donneurs
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="${pageContext.request.contextPath}/receivers">
-                            <i class="fas fa-user-injured me-2"></i> Receveurs
+                            <i class="fas fa-user-injured me-2"></i>Receveurs
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/matching?action=showMatching">
+                            <i class="fas fa-handshake me-2"></i>Matching
                         </a>
                     </li>
                 </ul>
             </div>
         </nav>
 
-        <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2 text-dark">Gestion des Receveurs</h1>
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+            <div class="page-header">
+                <h1 class="h2">Gestion des Receveurs</h1>
             </div>
 
-            <!-- Messages -->
+
             <c:if test="${not empty success}">
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>
@@ -120,12 +260,12 @@
                 </div>
             </c:if>
 
-            <!-- إحصائيات الأولوية -->
+
             <div class="row mb-4">
                 <div class="col-md-4">
-                    <div class="card border-danger">
+                    <div class="card stats-card border-danger">
                         <div class="card-body text-center">
-                            <h3 class="text-danger">
+                            <h3 class="text-danger mb-2">
                                 <c:set var="criticalCount" value="0" />
                                 <c:forEach var="receiver" items="${receivers}">
                                     <c:if test="${receiver.medicalUrgency == 'CRITIQUE'}">
@@ -134,14 +274,14 @@
                                 </c:forEach>
                                 ${criticalCount}
                             </h3>
-                            <p class="text-muted mb-0">Cas Critiques</p>
+                            <p class="text-muted mb-0 fw-semibold">Cas Critiques</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card border-warning">
+                    <div class="card stats-card border-warning">
                         <div class="card-body text-center">
-                            <h3 class="text-warning">
+                            <h3 class="text-warning mb-2">
                                 <c:set var="urgentCount" value="0" />
                                 <c:forEach var="receiver" items="${receivers}">
                                     <c:if test="${receiver.medicalUrgency == 'URGENT'}">
@@ -150,14 +290,14 @@
                                 </c:forEach>
                                 ${urgentCount}
                             </h3>
-                            <p class="text-muted mb-0">Cas Urgents</p>
+                            <p class="text-muted mb-0 fw-semibold">Cas Urgents</p>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card border-info">
+                    <div class="card stats-card border-info">
                         <div class="card-body text-center">
-                            <h3 class="text-info">
+                            <h3 class="text-info mb-2">
                                 <c:set var="normalCount" value="0" />
                                 <c:forEach var="receiver" items="${receivers}">
                                     <c:if test="${receiver.medicalUrgency == 'NORMAL'}">
@@ -166,42 +306,42 @@
                                 </c:forEach>
                                 ${normalCount}
                             </h3>
-                            <p class="text-muted mb-0">Cas Normaux</p>
+                            <p class="text-muted mb-0 fw-semibold">Cas Normaux</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- محتوى القائمة -->
+
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h3 class="text-dark mb-0">Liste des Receveurs</h3>
+                    <h3 class="text-dark mb-1">Liste des Receveurs</h3>
                     <small class="text-muted">Triée par priorité (CRITIQUE → URGENT → NORMAL)</small>
                 </div>
                 <a href="${pageContext.request.contextPath}/receivers?action=new" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i> Nouveau Receveur
+                    <i class="fas fa-plus me-2"></i>Nouveau Receveur
                 </a>
             </div>
 
             <c:choose>
                 <c:when test="${empty receivers}">
-                    <div class="card border-0 shadow-sm">
+                    <div class="card">
                         <div class="card-body text-center py-5">
                             <i class="fas fa-users fa-3x text-muted mb-3"></i>
                             <h4 class="text-muted">Aucun receveur trouvé</h4>
                             <p class="text-muted mb-4">Il n'y a pas de receveurs enregistrés pour le moment.</p>
                             <a href="${pageContext.request.contextPath}/receivers?action=new" class="btn btn-primary">
-                                <i class="fas fa-plus me-2"></i> Ajouter le premier receveur
+                                <i class="fas fa-plus me-2"></i>Ajouter le premier receveur
                             </a>
                         </div>
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body">
+                    <div class="card">
+                        <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead class="table-dark">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead>
                                     <tr>
                                         <th>Priorité</th>
                                         <th>CIN</th>
@@ -277,18 +417,17 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress flex-grow-1 me-2" style="height: 12px;">
+                                                    <div class="progress flex-grow-1 me-2" style="width: 100px;">
                                                         <div class="progress-bar
-                                                                <c:choose>
-                                                                    <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">bg-danger</c:when>
-                                                                    <c:when test="${receiver.medicalUrgency == 'URGENT'}">bg-warning</c:when>
-                                                                    <c:otherwise>bg-info</c:otherwise>
-                                                                </c:choose>"
-                                                             role="progressbar"
+                                                            <c:choose>
+                                                                <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">bg-danger</c:when>
+                                                                <c:when test="${receiver.medicalUrgency == 'URGENT'}">bg-warning</c:when>
+                                                                <c:otherwise>bg-info</c:otherwise>
+                                                            </c:choose>"
                                                              style="width: ${(receiver.currentDonationCount / receiver.requiredDonationCount) * 100}%">
                                                         </div>
                                                     </div>
-                                                    <small class="text-muted">
+                                                    <small class="text-muted fw-semibold">
                                                             ${receiver.currentDonationCount}/${receiver.requiredDonationCount}
                                                     </small>
                                                 </div>
@@ -313,15 +452,15 @@
                                 </table>
                             </div>
 
-                            <!-- إحصائيات -->
-                            <div class="mt-4 pt-3 border-top">
+
+                            <div class="p-4 border-top bg-light">
                                 <div class="row text-center">
                                     <div class="col-md-3">
-                                        <h5 class="text-primary mb-1">${receivers.size()}</h5>
+                                        <h5 class="text-danger mb-1 fw-bold">${receivers.size()}</h5>
                                         <small class="text-muted">Total Receveurs</small>
                                     </div>
                                     <div class="col-md-3">
-                                        <h5 class="text-success mb-1">
+                                        <h5 class="text-success mb-1 fw-bold">
                                             <c:set var="satisfiedCount" value="0" />
                                             <c:forEach var="receiver" items="${receivers}">
                                                 <c:if test="${receiver.status == 'SATISFAIT'}">
@@ -333,7 +472,7 @@
                                         <small class="text-muted">Satisfaits</small>
                                     </div>
                                     <div class="col-md-3">
-                                        <h5 class="text-warning mb-1">
+                                        <h5 class="text-warning mb-1 fw-bold">
                                             <c:set var="waitingCount" value="0" />
                                             <c:forEach var="receiver" items="${receivers}">
                                                 <c:if test="${receiver.status == 'EN_ATTENTE'}">
@@ -345,7 +484,7 @@
                                         <small class="text-muted">En Attente</small>
                                     </div>
                                     <div class="col-md-3">
-                                        <h5 class="text-info mb-1">
+                                        <h5 class="text-info mb-1 fw-bold">
                                             <c:set var="totalNeeded" value="0" />
                                             <c:forEach var="receiver" items="${receivers}">
                                                 <c:set var="totalNeeded" value="${totalNeeded + receiver.requiredDonationCount}" />

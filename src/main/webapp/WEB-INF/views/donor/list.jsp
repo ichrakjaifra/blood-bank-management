@@ -10,55 +10,239 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        :root {
+            --primary-red: #dc3545;
+            --dark-red: #c82333;
+            --light-red: #f8d7da;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
         .sidebar {
             min-height: 100vh;
-            background: linear-gradient(180deg, #dc3545 0%, #c82333 100%);
+            background: white;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            border-right: 3px solid var(--primary-red);
         }
-        .sidebar .nav-link {
+
+        .sidebar-header {
+            padding: 30px 20px;
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            border-bottom: 3px solid var(--dark-red);
+        }
+
+        .sidebar-logo {
             color: white;
-            padding: 12px 20px;
-            margin: 4px 0;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 0;
         }
-        .sidebar .nav-link:hover, .sidebar .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.2);
+
+        .sidebar-logo i {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .sidebar .nav-link {
+            color: #495057;
+            padding: 15px 25px;
+            margin: 8px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: var(--light-red);
+            color: var(--primary-red);
+            border-left-color: var(--primary-red);
             transform: translateX(5px);
         }
+
+        .sidebar .nav-link.active {
+            background-color: var(--primary-red);
+            color: white;
+            border-left-color: var(--dark-red);
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+        }
+
+        .sidebar .nav-link i {
+            width: 25px;
+            text-align: center;
+        }
+
         .main-content {
-            background-color: #f8f9fa;
+            background-color: white;
             min-height: 100vh;
+            padding: 30px;
         }
-        .blood-badge {
-            font-size: 0.75em;
-            padding: 0.4em 0.8em;
-            border-radius: 20px;
+
+        .page-header {
+            border-bottom: 3px solid var(--primary-red);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-header h1 {
+            color: var(--primary-red);
+            font-weight: 700;
+            font-size: 2rem;
+            margin: 0;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
             font-weight: 600;
+            transition: all 0.3s ease;
         }
-        .table th {
-            background-color: #343a40;
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .table-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .table-card .card-body {
+            padding: 0;
+        }
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #343a40 0%, #495057 100%);
             color: white;
             font-weight: 600;
             border: none;
-            padding: 12px 15px;
+            padding: 18px 20px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
         }
-        .table td {
-            padding: 12px 15px;
+
+        .table tbody td {
+            padding: 18px 20px;
             vertical-align: middle;
-            border-color: #dee2e6;
+            border-color: #f1f3f5;
         }
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(0, 0, 0, 0.02);
-        }
-        .table-hover tbody tr:hover {
-            background-color: rgba(220, 53, 69, 0.08);
-            transform: translateY(-1px);
+
+        .table tbody tr {
             transition: all 0.2s ease;
         }
-        .card {
+
+        .table tbody tr:hover {
+            background-color: rgba(220, 53, 69, 0.05);
+            transform: scale(1.01);
+        }
+
+        .blood-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .status-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-group-sm .btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-outline-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-danger:hover {
+            transform: translateY(-2px);
+        }
+
+        .stats-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 10px;
+            border-top: 3px solid var(--primary-red);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-item h5 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-item small {
+            color: #6c757d;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: #dee2e6;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h4 {
+            color: #6c757d;
+            margin-bottom: 15px;
+        }
+
+        .alert {
+            border-radius: 10px;
             border: none;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background-color: #d1e7dd;
+            border-left-color: #198754;
+            color: #0f5132;
+        }
+
+        .alert-danger {
+            background-color: var(--light-red);
+            border-left-color: var(--primary-red);
+            color: #842029;
         }
     </style>
 </head>
@@ -66,25 +250,33 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse bg-danger">
-            <div class="position-sticky pt-3">
-                <h4 class="text-white text-center mb-4">
-                    <i class="fas fa-tint me-2"></i>Blood Bank
+        <nav class="col-md-3 col-lg-2 d-md-block sidebar p-0">
+            <div class="sidebar-header">
+                <h4 class="sidebar-logo">
+                    <i class="fas fa-tint"></i>
+                    Blood Bank
                 </h4>
+            </div>
+            <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/home">
-                            <i class="fas fa-home me-2"></i>Accueil
+                            <i class="fas fa-home me-2"></i> Accueil
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="${pageContext.request.contextPath}/donors">
-                            <i class="fas fa-user-plus me-2"></i>Donneurs
+                            <i class="fas fa-user-plus me-2"></i> Donneurs
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/receivers">
-                            <i class="fas fa-user-injured me-2"></i>Receveurs
+                            <i class="fas fa-user-injured me-2"></i> Receveurs
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/matching?action=showMatching">
+                            <i class="fas fa-handshake me-2"></i> Matching
                         </a>
                     </li>
                 </ul>
@@ -92,9 +284,12 @@
         </nav>
 
         <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2 text-dark">Gestion des Donneurs</h1>
+        <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+            <div class="page-header">
+                <h1><i class="fas fa-users me-2"></i>Gestion des Donneurs</h1>
+                <a href="${pageContext.request.contextPath}/donors?action=new" class="btn btn-danger">
+                    <i class="fas fa-plus me-2"></i>Nouveau Donneur
+                </a>
             </div>
 
             <!-- Messages -->
@@ -113,48 +308,42 @@
                 </div>
             </c:if>
 
-            <!-- محتوى القائمة -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="text-dark mb-0">Liste des Donneurs</h3>
-                <a href="${pageContext.request.contextPath}/donors?action=new" class="btn btn-danger">
-                    <i class="fas fa-plus me-2"></i>Nouveau Donneur
-                </a>
-            </div>
-
             <c:choose>
                 <c:when test="${empty donors}">
-                    <div class="card border-0 shadow-sm">
-                        <div class="card-body text-center py-5">
-                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
-                            <h4 class="text-muted">Aucun donneur trouvé</h4>
-                            <p class="text-muted mb-4">Il n'y a pas de donneurs enregistrés pour le moment.</p>
-                            <a href="${pageContext.request.contextPath}/donors?action=new" class="btn btn-danger">
-                                <i class="fas fa-plus me-2"></i>Ajouter le premier donneur
-                            </a>
+                    <div class="table-card">
+                        <div class="card-body">
+                            <div class="empty-state">
+                                <i class="fas fa-users"></i>
+                                <h4>Aucun donneur trouvé</h4>
+                                <p class="text-muted mb-4">Il n'y a pas de donneurs enregistrés pour le moment.</p>
+                                <a href="${pageContext.request.contextPath}/donors?action=new" class="btn btn-danger">
+                                    <i class="fas fa-plus me-2"></i>Ajouter le premier donneur
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </c:when>
                 <c:otherwise>
-                    <div class="card border-0 shadow-sm">
+                    <div class="table-card mb-4">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-striped table-hover align-middle">
-                                    <thead class="table-dark">
+                                <table class="table table-hover align-middle">
+                                    <thead>
                                     <tr>
-                                        <th class="ps-3">CIN</th>
+                                        <th>CIN</th>
                                         <th>Nom Complet</th>
                                         <th>Téléphone</th>
                                         <th>Âge</th>
                                         <th>Groupe Sanguin</th>
                                         <th>Poids</th>
                                         <th>Statut</th>
-                                        <th class="text-center pe-3">Actions</th>
+                                        <th class="text-center">Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach var="donor" items="${donors}">
                                         <tr>
-                                            <td class="ps-3 fw-semibold"><c:out value="${donor.cin}" /></td>
+                                            <td class="fw-semibold"><c:out value="${donor.cin}" /></td>
                                             <td class="fw-semibold"><c:out value="${donor.fullName}" /></td>
                                             <td>
                                                 <c:choose>
@@ -170,7 +359,7 @@
                                                 <span class="badge bg-light text-dark">${donor.age} ans</span>
                                             </td>
                                             <td>
-                                                <span class="badge blood-badge bg-danger">
+                                                <span class="badge blood-badge bg-danger text-white">
                                                         ${donor.bloodGroup.displayName}
                                                 </span>
                                             </td>
@@ -180,23 +369,23 @@
                                             <td>
                                                 <c:choose>
                                                     <c:when test="${donor.status == 'DISPONIBLE'}">
-                                                        <span class="badge bg-success">
-                                                            <i class="fas fa-check me-1"></i>Disponible
+                                                        <span class="status-badge bg-success text-white">
+                                                            <i class="fas fa-check"></i>Disponible
                                                         </span>
                                                     </c:when>
                                                     <c:when test="${donor.status == 'NON_DISPONIBLE'}">
-                                                        <span class="badge bg-warning text-dark">
-                                                            <i class="fas fa-clock me-1"></i>Non Disponible
+                                                        <span class="status-badge bg-warning text-dark">
+                                                            <i class="fas fa-clock"></i>Non Disponible
                                                         </span>
                                                     </c:when>
                                                     <c:otherwise>
-                                                        <span class="badge bg-danger">
-                                                            <i class="fas fa-times me-1"></i>Non Éligible
+                                                        <span class="status-badge bg-danger text-white">
+                                                            <i class="fas fa-times"></i>Non Éligible
                                                         </span>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td class="text-center pe-3">
+                                            <td class="text-center">
                                                 <div class="btn-group btn-group-sm">
                                                     <a href="${pageContext.request.contextPath}/donors?action=edit&id=${donor.id}"
                                                        class="btn btn-outline-primary"
@@ -216,51 +405,51 @@
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                    </div>
 
-                            <!-- Statistiques -->
-                            <div class="mt-4 pt-3 border-top">
-                                <div class="row text-center">
-                                    <div class="col-md-3">
-                                        <h5 class="text-primary mb-1">${fn:length(donors)}</h5>
-                                        <small class="text-muted">Total Donneurs</small>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h5 class="text-success mb-1">
-                                            <c:set var="availableCount" value="0" />
-                                            <c:forEach var="donor" items="${donors}">
-                                                <c:if test="${donor.status == 'DISPONIBLE'}">
-                                                    <c:set var="availableCount" value="${availableCount + 1}" />
-                                                </c:if>
-                                            </c:forEach>
-                                                ${availableCount}
-                                        </h5>
-                                        <small class="text-muted">Disponibles</small>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h5 class="text-warning mb-1">
-                                            <c:set var="unavailableCount" value="0" />
-                                            <c:forEach var="donor" items="${donors}">
-                                                <c:if test="${donor.status == 'NON_DISPONIBLE'}">
-                                                    <c:set var="unavailableCount" value="${unavailableCount + 1}" />
-                                                </c:if>
-                                            </c:forEach>
-                                                ${unavailableCount}
-                                        </h5>
-                                        <small class="text-muted">Non Disponibles</small>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h5 class="text-danger mb-1">
-                                            <c:set var="ineligibleCount" value="0" />
-                                            <c:forEach var="donor" items="${donors}">
-                                                <c:if test="${donor.status == 'NON_ELIGIBLE'}">
-                                                    <c:set var="ineligibleCount" value="${ineligibleCount + 1}" />
-                                                </c:if>
-                                            </c:forEach>
-                                                ${ineligibleCount}
-                                        </h5>
-                                        <small class="text-muted">Non Éligibles</small>
-                                    </div>
-                                </div>
+                    <!-- Statistics -->
+                    <div class="stats-section">
+                        <div class="row">
+                            <div class="col-md-3 stat-item">
+                                <h5 class="text-primary">${fn:length(donors)}</h5>
+                                <small>Total Donneurs</small>
+                            </div>
+                            <div class="col-md-3 stat-item">
+                                <h5 class="text-success">
+                                    <c:set var="availableCount" value="0" />
+                                    <c:forEach var="donor" items="${donors}">
+                                        <c:if test="${donor.status == 'DISPONIBLE'}">
+                                            <c:set var="availableCount" value="${availableCount + 1}" />
+                                        </c:if>
+                                    </c:forEach>
+                                        ${availableCount}
+                                </h5>
+                                <small>Disponibles</small>
+                            </div>
+                            <div class="col-md-3 stat-item">
+                                <h5 class="text-warning">
+                                    <c:set var="unavailableCount" value="0" />
+                                    <c:forEach var="donor" items="${donors}">
+                                        <c:if test="${donor.status == 'NON_DISPONIBLE'}">
+                                            <c:set var="unavailableCount" value="${unavailableCount + 1}" />
+                                        </c:if>
+                                    </c:forEach>
+                                        ${unavailableCount}
+                                </h5>
+                                <small>Non Disponibles</small>
+                            </div>
+                            <div class="col-md-3 stat-item">
+                                <h5 class="text-danger">
+                                    <c:set var="ineligibleCount" value="0" />
+                                    <c:forEach var="donor" items="${donors}">
+                                        <c:if test="${donor.status == 'NON_ELIGIBLE'}">
+                                            <c:set var="ineligibleCount" value="${ineligibleCount + 1}" />
+                                        </c:if>
+                                    </c:forEach>
+                                        ${ineligibleCount}
+                                </h5>
+                                <small>Non Éligibles</small>
                             </div>
                         </div>
                     </div>
