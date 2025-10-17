@@ -343,7 +343,7 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <h5 class="section-title">Informations Personnelles</h5>
+                        <h5 class="section-title"><i class="fas fa-user me-2"></i>Informations Personnelles</h5>
 
                         <div class="mb-3">
                             <label for="cin" class="form-label">CIN *</label>
@@ -377,7 +377,7 @@
                     </div>
 
                     <div class="col-md-6">
-                        <h5 class="section-title">Informations Médicales</h5>
+                        <h5 class="section-title"><i class="fas fa-heartbeat me-2"></i>Informations Médicales</h5>
 
                         <div class="mb-3">
                             <label class="form-label">Sexe *</label>
