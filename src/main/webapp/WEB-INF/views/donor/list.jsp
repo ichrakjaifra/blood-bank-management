@@ -1,461 +1,379 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Bank Management - Gestion des Donneurs</title>
+    <title>Blood Bank - Liste des Donneurs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-red: #dc3545;
-            --dark-red: #c82333;
-            --light-red: #f8d7da;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
         }
 
         .sidebar {
-            min-height: 100vh;
-            background: white;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-            border-right: 3px solid var(--primary-red);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 260px;
+            background-color: #dc2626;
+            padding: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
         .sidebar-header {
-            padding: 30px 20px;
-            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
-            border-bottom: 3px solid var(--dark-red);
-        }
-
-        .sidebar-logo {
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 700;
+            padding: 32px 24px;
+            background-color: #b91c1c;
             text-align: center;
-            margin: 0;
         }
 
-        .sidebar-logo i {
-            font-size: 2rem;
-            display: block;
-            margin-bottom: 10px;
+        .logo {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
 
-        .sidebar .nav-link {
-            color: #495057;
-            padding: 15px 25px;
-            margin: 8px 15px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
+        .logo i {
+            font-size: 32px;
+        }
+
+        .nav-menu {
+            padding: 24px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.2s ease;
             font-weight: 500;
-            border-left: 3px solid transparent;
+            border-left: 4px solid transparent;
         }
 
-        .sidebar .nav-link:hover {
-            background-color: var(--light-red);
-            color: var(--primary-red);
-            border-left-color: var(--primary-red);
-            transform: translateX(5px);
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-left-color: #ffffff;
         }
 
-        .sidebar .nav-link.active {
-            background-color: var(--primary-red);
-            color: white;
-            border-left-color: var(--dark-red);
-            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-left-color: #ffffff;
         }
 
-        .sidebar .nav-link i {
-            width: 25px;
+        .nav-link i {
+            width: 20px;
             text-align: center;
         }
 
         .main-content {
-            background-color: white;
+            margin-left: 260px;
+            padding: 40px;
             min-height: 100vh;
-            padding: 30px;
         }
 
         .page-header {
-            border-bottom: 3px solid var(--primary-red);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 32px;
         }
 
-        .page-header h1 {
-            color: var(--primary-red);
+        .page-title {
+            font-size: 32px;
             font-weight: 700;
-            font-size: 2rem;
-            margin: 0;
+            color: #1a1a1a;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #1a1a1a;
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .btn-danger:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+            background-color: #dc2626;
+            color: white;
         }
 
         .table-card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             overflow: hidden;
         }
 
-        .table-card .card-body {
-            padding: 0;
-        }
-
         .table {
-            margin-bottom: 0;
+            width: 100%;
+            margin: 0;
         }
 
-        .table thead th {
-            background: linear-gradient(135deg, #343a40 0%, #495057 100%);
+        .table thead {
+            background-color: #dc2626;
             color: white;
+        }
+
+        .table th {
+            padding: 16px 20px;
             font-weight: 600;
-            border: none;
-            padding: 18px 20px;
+            text-align: left;
+            font-size: 14px;
             text-transform: uppercase;
-            font-size: 0.85rem;
             letter-spacing: 0.5px;
         }
 
-        .table tbody td {
-            padding: 18px 20px;
-            vertical-align: middle;
-            border-color: #f1f3f5;
-        }
-
-        .table tbody tr {
-            transition: all 0.2s ease;
+        .table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f3f4f6;
         }
 
         .table tbody tr:hover {
-            background-color: rgba(220, 53, 69, 0.05);
-            transform: scale(1.01);
+            background-color: #fef2f2;
         }
 
-        .blood-badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
+        .badge {
             display: inline-block;
-        }
-
-        .status-badge {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.8rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-group-sm .btn {
-            padding: 8px 12px;
+            padding: 6px 12px;
             border-radius: 6px;
-            transition: all 0.2s ease;
+            font-size: 13px;
+            font-weight: 600;
         }
 
-        .btn-outline-primary:hover {
-            transform: translateY(-2px);
+        .badge-red {
+            background-color: #fee2e2;
+            color: #dc2626;
         }
 
-        .btn-outline-danger:hover {
-            transform: translateY(-2px);
+        .badge-green {
+            background-color: #d1fae5;
+            color: #059669;
         }
 
-        .stats-section {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 25px;
-            border-radius: 10px;
-            border-top: 3px solid var(--primary-red);
+        .badge-gray {
+            background-color: #f3f4f6;
+            color: #4b5563;
         }
 
-        .stat-item {
-            text-align: center;
+        .alert {
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border-left: 4px solid;
         }
 
-        .stat-item h5 {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 5px;
+        .alert-success {
+            background-color: #d1fae5;
+            border-color: #059669;
+            color: #065f46;
         }
 
-        .stat-item small {
-            color: #6c757d;
-            font-weight: 500;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
+        .alert-danger {
+            background-color: #fee2e2;
+            border-color: #dc2626;
+            color: #991b1b;
         }
 
         .empty-state {
             text-align: center;
             padding: 60px 20px;
+            color: #666;
         }
 
         .empty-state i {
-            font-size: 4rem;
-            color: #dee2e6;
+            font-size: 64px;
+            color: #e5e7eb;
             margin-bottom: 20px;
         }
 
-        .empty-state h4 {
-            color: #6c757d;
-            margin-bottom: 15px;
-        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
 
-        .alert {
-            border-radius: 10px;
-            border: none;
-            border-left: 4px solid;
-        }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
 
-        .alert-success {
-            background-color: #d1e7dd;
-            border-left-color: #198754;
-            color: #0f5132;
-        }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
 
-        .alert-danger {
-            background-color: var(--light-red);
-            border-left-color: var(--primary-red);
-            color: #842029;
+            .table-card {
+                overflow-x: auto;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar p-0">
-            <div class="sidebar-header">
-                <h4 class="sidebar-logo">
-                    <i class="fas fa-tint"></i>
-                    Blood Bank
-                </h4>
-            </div>
-            <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/home">
-                            <i class="fas fa-home me-2"></i> Accueil
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="${pageContext.request.contextPath}/donors">
-                            <i class="fas fa-user-plus me-2"></i> Donneurs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/receivers">
-                            <i class="fas fa-user-injured me-2"></i> Receveurs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/matching?action=showMatching">
-                            <i class="fas fa-handshake me-2"></i> Matching
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <a href="${pageContext.request.contextPath}/home" class="logo">
+            <i class="fas fa-tint"></i>
+            <span>Blood Bank</span>
+        </a>
+    </div>
+    <nav class="nav-menu">
+        <a href="${pageContext.request.contextPath}/home" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/donors" class="nav-link active">
+            <i class="fas fa-user-plus"></i>
+            <span>Donneurs</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/receivers" class="nav-link">
+            <i class="fas fa-user-injured"></i>
+            <span>Receveurs</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/matching?action=showMatching" class="nav-link">
+            <i class="fas fa-handshake"></i>
+            <span>Matching</span>
+        </a>
+    </nav>
+</div>
 
-        <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
-            <div class="page-header">
-                <h1><i class="fas fa-users me-2"></i>Gestion des Donneurs</h1>
-                <a href="${pageContext.request.contextPath}/donors?action=new" class="btn btn-danger">
-                    <i class="fas fa-plus me-2"></i>Nouveau Donneur
-                </a>
-            </div>
+<div class="main-content">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-user-plus me-2"></i>
+            Liste des Donneurs
+        </h1>
+        <a href="${pageContext.request.contextPath}/donors?action=new" class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            Nouveau Donneur
+        </a>
+    </div>
 
-            <!-- Messages -->
-            <c:if test="${not empty success}">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <c:out value="${success}" />
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <c:if test="${not empty success}">
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle me-2"></i>
+                ${success}
+        </div>
+    </c:if>
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>
+                ${error}
+        </div>
+    </c:if>
+
+    <div class="table-card">
+        <c:choose>
+            <c:when test="${empty donors}">
+                <div class="empty-state">
+                    <i class="fas fa-users"></i>
+                    <h3>Aucun donneur trouvé</h3>
+                    <p>Commencez par ajouter votre premier donneur</p>
+                    <a href="${pageContext.request.contextPath}/donors?action=new" class="btn btn-primary" style="margin-top: 20px;">
+                        <i class="fas fa-plus"></i>
+                        Nouveau Donneur
+                    </a>
                 </div>
-            </c:if>
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <c:out value="${error}" />
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            </c:if>
-
-            <c:choose>
-                <c:when test="${empty donors}">
-                    <div class="table-card">
-                        <div class="card-body">
-                            <div class="empty-state">
-                                <i class="fas fa-users"></i>
-                                <h4>Aucun donneur trouvé</h4>
-                                <p class="text-muted mb-4">Il n'y a pas de donneurs enregistrés pour le moment.</p>
-                                <a href="${pageContext.request.contextPath}/donors?action=new" class="btn btn-danger">
-                                    <i class="fas fa-plus me-2"></i>Ajouter le premier donneur
+            </c:when>
+            <c:otherwise>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nom Complet</th>
+                        <th>CIN</th>
+                        <th>Âge</th>
+                        <th>Groupe Sanguin</th>
+                        <th>Téléphone</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="donor" items="${donors}">
+                        <tr>
+                            <td><strong>${donor.fullName}</strong></td>
+                            <td>${donor.cin}</td>
+                            <td>${donor.age} ans</td>
+                            <td>
+                                <span class="badge badge-red">${donor.bloodGroup.displayName}</span>
+                            </td>
+                            <td>${donor.phone}</td>
+                            <td>
+                                        <span class="badge ${donor.status == 'DISPONIBLE' ? 'badge-green' : 'badge-gray'}">
+                                                ${donor.status}
+                                        </span>
+                            </td>
+                            <td>
+                                <a href="${pageContext.request.contextPath}/donors?action=edit&id=${donor.id}"
+                                   class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-edit"></i>
                                 </a>
-                            </div>
-                        </div>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="table-card mb-4">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead>
-                                    <tr>
-                                        <th>CIN</th>
-                                        <th>Nom Complet</th>
-                                        <th>Téléphone</th>
-                                        <th>Âge</th>
-                                        <th>Groupe Sanguin</th>
-                                        <th>Poids</th>
-                                        <th>Statut</th>
-                                        <th class="text-center">Actions</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <c:forEach var="donor" items="${donors}">
-                                        <tr>
-                                            <td class="fw-semibold"><c:out value="${donor.cin}" /></td>
-                                            <td class="fw-semibold"><c:out value="${donor.fullName}" /></td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${not empty donor.phone}">
-                                                        <c:out value="${donor.phone}" />
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="text-muted">Non renseigné</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-light text-dark">${donor.age} ans</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge blood-badge bg-danger text-white">
-                                                        ${donor.bloodGroup.displayName}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="fw-semibold">${donor.weight} kg</span>
-                                            </td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${donor.status == 'DISPONIBLE'}">
-                                                        <span class="status-badge bg-success text-white">
-                                                            <i class="fas fa-check"></i>Disponible
-                                                        </span>
-                                                    </c:when>
-                                                    <c:when test="${donor.status == 'NON_DISPONIBLE'}">
-                                                        <span class="status-badge bg-warning text-dark">
-                                                            <i class="fas fa-clock"></i>Non Disponible
-                                                        </span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="status-badge bg-danger text-white">
-                                                            <i class="fas fa-times"></i>Non Éligible
-                                                        </span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="btn-group btn-group-sm">
-                                                    <a href="${pageContext.request.contextPath}/donors?action=edit&id=${donor.id}"
-                                                       class="btn btn-outline-primary"
-                                                       title="Modifier">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a href="${pageContext.request.contextPath}/donors?action=delete&id=${donor.id}"
-                                                       class="btn btn-outline-danger"
-                                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce donneur?')"
-                                                       title="Supprimer">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Statistics -->
-                    <div class="stats-section">
-                        <div class="row">
-                            <div class="col-md-3 stat-item">
-                                <h5 class="text-primary">${fn:length(donors)}</h5>
-                                <small>Total Donneurs</small>
-                            </div>
-                            <div class="col-md-3 stat-item">
-                                <h5 class="text-success">
-                                    <c:set var="availableCount" value="0" />
-                                    <c:forEach var="donor" items="${donors}">
-                                        <c:if test="${donor.status == 'DISPONIBLE'}">
-                                            <c:set var="availableCount" value="${availableCount + 1}" />
-                                        </c:if>
-                                    </c:forEach>
-                                        ${availableCount}
-                                </h5>
-                                <small>Disponibles</small>
-                            </div>
-                            <div class="col-md-3 stat-item">
-                                <h5 class="text-warning">
-                                    <c:set var="unavailableCount" value="0" />
-                                    <c:forEach var="donor" items="${donors}">
-                                        <c:if test="${donor.status == 'NON_DISPONIBLE'}">
-                                            <c:set var="unavailableCount" value="${unavailableCount + 1}" />
-                                        </c:if>
-                                    </c:forEach>
-                                        ${unavailableCount}
-                                </h5>
-                                <small>Non Disponibles</small>
-                            </div>
-                            <div class="col-md-3 stat-item">
-                                <h5 class="text-danger">
-                                    <c:set var="ineligibleCount" value="0" />
-                                    <c:forEach var="donor" items="${donors}">
-                                        <c:if test="${donor.status == 'NON_ELIGIBLE'}">
-                                            <c:set var="ineligibleCount" value="${ineligibleCount + 1}" />
-                                        </c:if>
-                                    </c:forEach>
-                                        ${ineligibleCount}
-                                </h5>
-                                <small>Non Éligibles</small>
-                            </div>
-                        </div>
-                    </div>
-                </c:otherwise>
-            </c:choose>
-        </main>
+                                <form method="post" action="${pageContext.request.contextPath}/donors"
+                                      style="display: inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="${donor.id}">
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Supprimer ce donneur?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 

@@ -5,390 +5,407 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Bank Management - Tableau de Bord</title>
+    <title>Blood Bank - Tableau de Bord</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-red: #dc3545;
-            --dark-red: #c82333;
-            --light-red: #f8d7da;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
         }
 
+        /* Solid Red Sidebar */
         .sidebar {
-            min-height: 100vh;
-            background: white;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-            border-right: 3px solid var(--primary-red);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 260px;
+            background-color: #dc2626;
+            padding: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
         .sidebar-header {
-            padding: 30px 20px;
-            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
-            border-bottom: 3px solid var(--dark-red);
+            padding: 32px 24px;
+            background-color: #b91c1c;
+            text-align: center;
         }
 
-        .sidebar-logo {
-            color: white;
-            font-size: 1.5rem;
+        .logo {
+            color: #ffffff;
+            font-size: 24px;
             font-weight: 700;
-            text-align: center;
-            margin: 0;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
         }
 
-        .sidebar-logo i {
-            font-size: 2rem;
-            display: block;
-            margin-bottom: 10px;
+        .logo i {
+            font-size: 32px;
         }
 
-        .sidebar .nav-link {
-            color: #495057;
-            padding: 15px 25px;
-            margin: 8px 15px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
+        .nav-menu {
+            padding: 24px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 24px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.2s ease;
             font-weight: 500;
-            border-left: 3px solid transparent;
+            border-left: 4px solid transparent;
         }
 
-        .sidebar .nav-link:hover {
-            background-color: var(--light-red);
-            color: var(--primary-red);
-            border-left-color: var(--primary-red);
-            transform: translateX(5px);
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-left-color: #ffffff;
         }
 
-        .sidebar .nav-link.active {
-            background-color: var(--primary-red);
-            color: white;
-            border-left-color: var(--dark-red);
-            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border-left-color: #ffffff;
         }
 
-        .sidebar .nav-link i {
-            width: 25px;
+        .nav-link i {
+            width: 20px;
             text-align: center;
         }
 
+        /* Main Content */
         .main-content {
-            background-color: white;
+            margin-left: 260px;
+            padding: 40px;
             min-height: 100vh;
-            padding: 30px;
         }
 
         .page-header {
-            border-bottom: 3px solid var(--primary-red);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
-        .page-header h1 {
-            color: var(--primary-red);
+        .page-title {
+            font-size: 32px;
             font-weight: 700;
-            font-size: 2rem;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Hero Section - GRADIENT RÉDUIT */
+        .hero-section {
+            background:
+                    linear-gradient(135deg, rgba(220, 38, 38, 0.3), rgba(185, 28, 28, 0.3)),
+                    url('https://images.unsplash.com/photo-1638272467190-4ff6f773315c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2030') center/cover;
+            border-radius: 16px;
+            padding: 60px;
+            color: white;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-text {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 600px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
         }
 
         .stat-card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            overflow: hidden;
-            border-left: 5px solid;
+            background: white;
+            border-radius: 12px;
+            padding: 28px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
         }
 
-        .stat-card.primary {
-            border-left-color: #0d6efd;
-            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
         }
 
-        .stat-card.success {
-            border-left-color: #198754;
-            background: linear-gradient(135deg, #198754 0%, #146c43 100%);
-        }
+        .stat-icon.red { background-color: #fee2e2; color: #dc2626; }
+        .stat-icon.gray { background-color: #f3f4f6; color: #4b5563; }
+        .stat-icon.green { background-color: #d1fae5; color: #059669; }
+        .stat-icon.orange { background-color: #fed7aa; color: #ea580c; }
 
-        .stat-card.warning {
-            border-left-color: #ffc107;
-            background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
-        }
-
-        .stat-card.info {
-            border-left-color: #0dcaf0;
-            background: linear-gradient(135deg, #0dcaf0 0%, #31d2f2 100%);
-        }
-
-        .stat-card .card-body {
-            padding: 25px;
-        }
-
-        .stat-card h4 {
-            font-size: 2.5rem;
+        .stat-value {
+            font-size: 36px;
             font-weight: 700;
-            margin-bottom: 5px;
+            color: #1a1a1a;
+            margin-bottom: 4px;
         }
 
-        .stat-card p {
-            font-size: 0.95rem;
-            margin-bottom: 0;
-            opacity: 0.95;
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
         }
 
-        .stat-card i {
-            font-size: 3rem;
-            opacity: 0.3;
+        /* Action Cards */
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
         }
 
-        .action-card, .stats-card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            overflow: hidden;
+        .action-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        .action-card .card-header, .stats-card .card-header {
-            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
-            color: white;
-            padding: 20px;
-            border: none;
-        }
-
-        .action-card .card-header h5, .stats-card .card-header h5 {
-            margin: 0;
-            font-weight: 600;
-        }
-
-        .action-card .card-body, .stats-card .card-body {
-            padding: 25px;
+        .action-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 24px;
         }
 
         .btn-action {
-            padding: 15px;
-            border-radius: 10px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-
-        .btn-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%);
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-bottom: 12px;
             border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #1a1a1a;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e5e7eb;
         }
 
         .alert {
-            border-radius: 10px;
-            border: none;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
             border-left: 4px solid;
         }
 
         .alert-success {
-            background-color: #d1e7dd;
-            border-left-color: #198754;
-            color: #0f5132;
+            background-color: #d1fae5;
+            border-color: #059669;
+            color: #065f46;
         }
 
         .alert-danger {
-            background-color: var(--light-red);
-            border-left-color: var(--primary-red);
-            color: #842029;
+            background-color: #fee2e2;
+            border-color: #dc2626;
+            color: #991b1b;
         }
 
-        .stats-info {
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-red);
-        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
 
-        .stats-info p {
-            margin-bottom: 10px;
-            color: #495057;
-        }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
 
-        .stats-info strong {
-            color: var(--primary-red);
+            .hero-section {
+                padding: 40px 24px;
+            }
+
+            .hero-title {
+                font-size: 32px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar p-0">
-            <div class="sidebar-header">
-                <h4 class="sidebar-logo">
-                    <i class="fas fa-tint"></i>
-                    Blood Bank
-                </h4>
-            </div>
-            <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="${pageContext.request.contextPath}/home">
-                            <i class="fas fa-home me-2"></i> Accueil
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/donors">
-                            <i class="fas fa-user-plus me-2"></i> Donneurs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/receivers">
-                            <i class="fas fa-user-injured me-2"></i> Receveurs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/matching?action=showMatching">
-                            <i class="fas fa-handshake me-2"></i> Matching
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
 
-        <!-- Main content -->
-        <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
-            <div class="page-header">
-                <h1><i class="fas fa-chart-line me-2"></i>Tableau de Bord</h1>
+<div class="sidebar">
+    <div class="sidebar-header">
+        <a href="${pageContext.request.contextPath}/home" class="logo">
+            <i class="fas fa-tint"></i>
+            <span>Blood Bank</span>
+        </a>
+    </div>
+    <nav class="nav-menu">
+        <a href="${pageContext.request.contextPath}/home" class="nav-link active">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/donors" class="nav-link">
+            <i class="fas fa-user-plus"></i>
+            <span>Donneurs</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/receivers" class="nav-link">
+            <i class="fas fa-user-injured"></i>
+            <span>Receveurs</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/matching?action=showMatching" class="nav-link">
+            <i class="fas fa-handshake"></i>
+            <span>Matching</span>
+        </a>
+    </nav>
+</div>
+
+<div class="main-content">
+
+    <c:if test="${not empty success}">
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle me-2"></i>
+            <c:out value="${success}" />
+        </div>
+    </c:if>
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <c:out value="${error}" />
+        </div>
+    </c:if>
+
+    <div class="hero-section">
+        <h1 class="hero-title">Sauver des vies ensemble</h1>
+        <p class="hero-text">
+            Gérez efficacement les donneurs et receveurs de sang.
+            Chaque don compte, chaque vie est précieuse.
+        </p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon red">
+                <i class="fas fa-users"></i>
             </div>
+            <div class="stat-value">${donorsCount}</div>
+            <div class="stat-label">Donneurs Total</div>
+        </div>
 
-            <!-- Messages -->
-            <c:if test="${not empty success}">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <c:out value="${success}" />
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            </c:if>
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <c:out value="${error}" />
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            </c:if>
-
-            <!-- Statistics Cards -->
-            <div class="row mb-4">
-                <div class="col-md-3 mb-3">
-                    <div class="stat-card primary text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h4>${donorsCount}</h4>
-                                    <p>Donneurs Total</p>
-                                </div>
-                                <i class="fas fa-user-plus"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="stat-card success text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h4>${availableDonorsCount}</h4>
-                                    <p>Donneurs Disponibles</p>
-                                </div>
-                                <i class="fas fa-check-circle"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="stat-card warning text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h4>${waitingReceiversCount}</h4>
-                                    <p>Receveurs en Attente</p>
-                                </div>
-                                <i class="fas fa-clock"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="stat-card info text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h4>${satisfiedReceiversCount}</h4>
-                                    <p>Receveurs Satisfaits</p>
-                                </div>
-                                <i class="fas fa-heart"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div class="stat-card">
+            <div class="stat-icon green">
+                <i class="fas fa-check-circle"></i>
             </div>
+            <div class="stat-value">${availableDonorsCount}</div>
+            <div class="stat-label">Donneurs Disponibles</div>
+        </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-4">
-                    <div class="action-card">
-                        <div class="card-header">
-                            <h5><i class="fas fa-bolt me-2"></i>Actions Rapides</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-grid gap-3">
-                                <a href="${pageContext.request.contextPath}/donors?action=new"
-                                   class="btn btn-danger btn-action">
-                                    <i class="fas fa-plus me-2"></i> Nouveau Donneur
-                                </a>
-                                <a href="${pageContext.request.contextPath}/receivers?action=new"
-                                   class="btn btn-primary btn-action">
-                                    <i class="fas fa-plus me-2"></i> Nouveau Receveur
-                                </a>
-                                <a href="${pageContext.request.contextPath}/matching?action=showMatching"
-                                   class="btn btn-success btn-action">
-                                    <i class="fas fa-handshake me-2"></i> Matching Donneurs/Receveurs
-                                </a>
-                                <a href="${pageContext.request.contextPath}/donors"
-                                   class="btn btn-outline-danger btn-action">
-                                    <i class="fas fa-list me-2"></i> Voir tous les Donneurs
-                                </a>
-                                <a href="${pageContext.request.contextPath}/receivers"
-                                   class="btn btn-outline-primary btn-action">
-                                    <i class="fas fa-list me-2"></i> Voir tous les Receveurs
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+        <div class="stat-card">
+            <div class="stat-icon orange">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-value">${waitingReceiversCount}</div>
+            <div class="stat-label">Receveurs en Attente</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon gray">
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="stat-value">${satisfiedReceiversCount}</div>
+            <div class="stat-label">Receveurs Satisfaits</div>
+        </div>
+    </div>
+
+    <div class="action-grid">
+        <div class="action-card">
+            <h3>Actions Rapides</h3>
+            <a href="${pageContext.request.contextPath}/donors?action=new" class="btn-action btn-primary">
+                <i class="fas fa-plus me-2"></i> Nouveau Donneur
+            </a>
+            <a href="${pageContext.request.contextPath}/receivers?action=new" class="btn-action btn-primary">
+                <i class="fas fa-plus me-2"></i> Nouveau Receveur
+            </a>
+            <a href="${pageContext.request.contextPath}/matching?action=showMatching" class="btn-action btn-secondary">
+                <i class="fas fa-handshake me-2"></i> Matching
+            </a>
+        </div>
+
+        <div class="action-card">
+            <h3>Statistiques du Jour</h3>
+            <div style="padding: 16px 0;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                    <span style="color: #666;">Dons réalisés</span>
+                    <strong style="color: #dc2626;">${todayDonations}</strong>
                 </div>
-                <div class="col-md-6 mb-4">
-                    <div class="stats-card">
-                        <div class="card-header">
-                            <h5><i class="fas fa-chart-bar me-2"></i>Statistiques</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="stats-info">
-                                <p><i class="fas fa-calendar-day me-2"></i>Dons réalisés aujourd'hui: <strong>${todayDonations}</strong></p>
-                                <p><i class="fas fa-heart me-2"></i>Receveurs satisfaits: <strong>${satisfiedReceiversCount}</strong></p>
-                                <p><i class="fas fa-percentage me-2"></i>Taux de compatibilité: <strong>${compatibilityRate}%</strong></p>
-                                <p class="mb-0"><i class="fas fa-users me-2"></i>Donneurs disponibles: <strong>${availableDonorsCount}/${donorsCount}</strong></p>
-                            </div>
-                        </div>
-                    </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                    <span style="color: #666;">Taux de compatibilité</span>
+                    <strong style="color: #dc2626;">${compatibilityRate}%</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: #666;">Disponibilité</span>
+                    <strong style="color: #dc2626;">${availableDonorsCount}/${donorsCount}</strong>
                 </div>
             </div>
-        </main>
+        </div>
     </div>
 </div>
 

@@ -1,505 +1,391 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Bank - Gestion des Receveurs</title>
+    <title>Blood Bank - Liste des Receveurs</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
         }
 
-        /* Modern sidebar with red gradient and white text */
         .sidebar {
-            min-height: 100vh;
-            background: linear-gradient(180deg, #dc3545 0%, #c82333 100%);
-            box-shadow: 2px 0 10px rgba(220, 53, 69, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 260px;
+            background-color: #dc2626;
+            padding: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.9);
+        .sidebar-header {
+            padding: 32px 24px;
+            background-color: #b91c1c;
+            text-align: center;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 32px;
+        }
+
+        .nav-menu {
+            padding: 24px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             padding: 14px 24px;
-            margin: 6px 12px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.2s ease;
             font-weight: 500;
+            border-left: 4px solid transparent;
         }
 
-        .sidebar .nav-link:hover {
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-left-color: #ffffff;
+        }
+
+        .nav-link.active {
             background-color: rgba(255, 255, 255, 0.15);
             color: #ffffff;
-            transform: translateX(5px);
+            border-left-color: #ffffff;
         }
 
-        .sidebar .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.25);
-            color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .nav-link i {
+            width: 20px;
+            text-align: center;
         }
 
-        .sidebar h4 {
-            padding: 24px 0;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 20px;
-        }
-
-        /* Clean white main content area */
         .main-content {
-            background-color: #f8f9fa;
+            margin-left: 260px;
+            padding: 40px;
             min-height: 100vh;
-            padding: 30px;
         }
 
-        /* Modern card design with subtle shadows */
-        .card {
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
             border: none;
-            border-radius: 16px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #b91c1c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+
+        .btn-secondary {
+            background-color: #f3f4f6;
+            color: #1a1a1a;
+        }
+
+        .btn-danger {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             overflow: hidden;
         }
 
-        .card-header {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            border: none;
-            padding: 20px 24px;
+        .table {
+            width: 100%;
+            margin: 0;
         }
 
-        /* Red-themed table styling */
-        .table th {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        .table thead {
+            background-color: #dc2626;
             color: white;
+        }
+
+        .table th {
+            padding: 16px 20px;
             font-weight: 600;
-            border: none;
-            padding: 16px;
+            text-align: left;
+            font-size: 14px;
             text-transform: uppercase;
-            font-size: 0.85rem;
             letter-spacing: 0.5px;
         }
 
         .table td {
-            padding: 16px;
-            vertical-align: middle;
-            border-color: #f0f0f0;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f3f4f6;
         }
 
-        .table-hover tbody tr:hover {
-            background-color: rgba(220, 53, 69, 0.05);
-            transform: scale(1.01);
-            transition: all 0.2s ease;
+        .table tbody tr:hover {
+            background-color: #fef2f2;
         }
 
-        /* Red-themed badges */
-        .blood-badge {
-            font-size: 0.85rem;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
-
-        .urgency-badge {
-            font-size: 0.75rem;
+        .badge {
+            display: inline-block;
             padding: 6px 12px;
-            border-radius: 20px;
+            border-radius: 6px;
+            font-size: 13px;
             font-weight: 600;
         }
 
-        /* Priority row styling with red accents */
-        .priority-critical {
-            background-color: #fff5f5 !important;
-            border-left: 4px solid #dc3545;
+        .badge-red {
+            background-color: #fee2e2;
+            color: #dc2626;
         }
 
-        .priority-urgent {
-            background-color: #fff9e6 !important;
-            border-left: 4px solid #ffc107;
+        .badge-green {
+            background-color: #d1fae5;
+            color: #059669;
         }
 
-        .priority-normal {
-            background-color: #f0f8ff !important;
-            border-left: 4px solid #0dcaf0;
+        .badge-gray {
+            background-color: #f3f4f6;
+            color: #4b5563;
         }
 
-        /* Modern progress bars */
-        .progress {
-            height: 10px;
-            border-radius: 10px;
-            background-color: #f0f0f0;
+        .alert {
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border-left: 4px solid;
         }
 
-        /* Red-themed buttons */
-        .btn-primary {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            border: none;
-            padding: 12px 28px;
-            border-radius: 10px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-            transition: all 0.3s ease;
+        .alert-success {
+            background-color: #d1fae5;
+            border-color: #059669;
+            color: #065f46;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
-            background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+        .alert-danger {
+            background-color: #fee2e2;
+            border-color: #dc2626;
+            color: #991b1b;
         }
 
-        .btn-outline-primary {
-            color: #dc3545;
-            border-color: #dc3545;
-            transition: all 0.3s ease;
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
         }
 
-        .btn-outline-primary:hover {
-            background-color: #dc3545;
-            border-color: #dc3545;
-            transform: scale(1.05);
+        .empty-state i {
+            font-size: 64px;
+            color: #e5e7eb;
+            margin-bottom: 20px;
         }
 
-        .btn-outline-danger:hover {
-            transform: scale(1.05);
-        }
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
 
-        /* Statistics cards with red borders */
-        .stats-card {
-            border-radius: 12px;
-            padding: 20px;
-            transition: all 0.3s ease;
-        }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
 
-        .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-        }
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
 
-        .border-danger {
-            border: 2px solid #dc3545 !important;
-        }
-
-        .border-warning {
-            border: 2px solid #ffc107 !important;
-        }
-
-        .border-info {
-            border: 2px solid #0dcaf0 !important;
-        }
-
-        /* Page header styling */
-        .page-header {
-            border-bottom: 3px solid #dc3545;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .page-header h1 {
-            color: #2c3e50;
-            font-weight: 700;
+            .table-card {
+                overflow-x: auto;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
+<div class="sidebar">
+    <div class="sidebar-header">
+        <a href="${pageContext.request.contextPath}/home" class="logo">
+            <i class="fas fa-tint"></i>
+            <span>Blood Bank</span>
+        </a>
+    </div>
+    <nav class="nav-menu">
+        <a href="${pageContext.request.contextPath}/home" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/donors" class="nav-link">
+            <i class="fas fa-user-plus"></i>
+            <span>Donneurs</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/receivers" class="nav-link active">
+            <i class="fas fa-user-injured"></i>
+            <span>Receveurs</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/matching?action=showMatching" class="nav-link">
+            <i class="fas fa-handshake"></i>
+            <span>Matching</span>
+        </a>
+    </nav>
+</div>
 
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
-            <div class="position-sticky pt-3">
-                <h4 class="text-white text-center">
-                    <i class="fas fa-tint me-2"></i>Blood Bank
-                </h4>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/home">
-                            <i class="fas fa-home me-2"></i>Accueil
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/donors">
-                            <i class="fas fa-user-plus me-2"></i>Donneurs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="${pageContext.request.contextPath}/receivers">
-                            <i class="fas fa-user-injured me-2"></i>Receveurs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/matching?action=showMatching">
-                            <i class="fas fa-handshake me-2"></i>Matching
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+<div class="main-content">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-user-injured me-2"></i>
+            Liste des Receveurs
+        </h1>
+        <a href="${pageContext.request.contextPath}/receivers?action=new" class="btn btn-primary">
+            <i class="fas fa-plus"></i>
+            Nouveau Receveur
+        </a>
+    </div>
 
+    <c:if test="${not empty success}">
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle me-2"></i>
+                ${success}
+        </div>
+    </c:if>
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>
+                ${error}
+        </div>
+    </c:if>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
-            <div class="page-header">
-                <h1 class="h2">Gestion des Receveurs</h1>
-            </div>
-
-
-            <c:if test="${not empty success}">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>
-                    <c:out value="${success}" />
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    <div class="table-card">
+        <c:choose>
+            <c:when test="${empty receivers}">
+                <div class="empty-state">
+                    <i class="fas fa-users"></i>
+                    <h3>Aucun receveur trouvé</h3>
+                    <p>Commencez par ajouter votre premier receveur</p>
+                    <a href="${pageContext.request.contextPath}/receivers?action=new" class="btn btn-primary" style="margin-top: 20px;">
+                        <i class="fas fa-plus"></i>
+                        Nouveau Receveur
+                    </a>
                 </div>
-            </c:if>
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>
-                    <c:out value="${error}" />
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            </c:if>
-
-
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="card stats-card border-danger">
-                        <div class="card-body text-center">
-                            <h3 class="text-danger mb-2">
-                                <c:set var="criticalCount" value="0" />
-                                <c:forEach var="receiver" items="${receivers}">
-                                    <c:if test="${receiver.medicalUrgency == 'CRITIQUE'}">
-                                        <c:set var="criticalCount" value="${criticalCount + 1}" />
-                                    </c:if>
-                                </c:forEach>
-                                ${criticalCount}
-                            </h3>
-                            <p class="text-muted mb-0 fw-semibold">Cas Critiques</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card stats-card border-warning">
-                        <div class="card-body text-center">
-                            <h3 class="text-warning mb-2">
-                                <c:set var="urgentCount" value="0" />
-                                <c:forEach var="receiver" items="${receivers}">
-                                    <c:if test="${receiver.medicalUrgency == 'URGENT'}">
-                                        <c:set var="urgentCount" value="${urgentCount + 1}" />
-                                    </c:if>
-                                </c:forEach>
-                                ${urgentCount}
-                            </h3>
-                            <p class="text-muted mb-0 fw-semibold">Cas Urgents</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card stats-card border-info">
-                        <div class="card-body text-center">
-                            <h3 class="text-info mb-2">
-                                <c:set var="normalCount" value="0" />
-                                <c:forEach var="receiver" items="${receivers}">
-                                    <c:if test="${receiver.medicalUrgency == 'NORMAL'}">
-                                        <c:set var="normalCount" value="${normalCount + 1}" />
-                                    </c:if>
-                                </c:forEach>
-                                ${normalCount}
-                            </h3>
-                            <p class="text-muted mb-0 fw-semibold">Cas Normaux</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <div>
-                    <h3 class="text-dark mb-1">Liste des Receveurs</h3>
-                    <small class="text-muted">Triée par priorité (CRITIQUE → URGENT → NORMAL)</small>
-                </div>
-                <a href="${pageContext.request.contextPath}/receivers?action=new" class="btn btn-primary">
-                    <i class="fas fa-plus me-2"></i>Nouveau Receveur
-                </a>
-            </div>
-
-            <c:choose>
-                <c:when test="${empty receivers}">
-                    <div class="card">
-                        <div class="card-body text-center py-5">
-                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
-                            <h4 class="text-muted">Aucun receveur trouvé</h4>
-                            <p class="text-muted mb-4">Il n'y a pas de receveurs enregistrés pour le moment.</p>
-                            <a href="${pageContext.request.contextPath}/receivers?action=new" class="btn btn-primary">
-                                <i class="fas fa-plus me-2"></i>Ajouter le premier receveur
-                            </a>
-                        </div>
-                    </div>
-                </c:when>
-                <c:otherwise>
-                    <div class="card">
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table table-hover align-middle mb-0">
-                                    <thead>
-                                    <tr>
-                                        <th>Priorité</th>
-                                        <th>CIN</th>
-                                        <th>Nom Complet</th>
-                                        <th>Téléphone</th>
-                                        <th>Âge</th>
-                                        <th>Groupe Sanguin</th>
-                                        <th>Statut</th>
-                                        <th>Progression</th>
-                                        <th class="text-center">Actions</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <c:forEach var="receiver" items="${receivers}">
-                                        <tr class="
-                                            <c:choose>
-                                                <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">priority-critical</c:when>
-                                                <c:when test="${receiver.medicalUrgency == 'URGENT'}">priority-urgent</c:when>
-                                                <c:otherwise>priority-normal</c:otherwise>
-                                            </c:choose>">
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">
-                                                        <span class="badge urgency-badge bg-danger">
-                                                            <i class="fas fa-exclamation-triangle me-1"></i>CRITIQUE
-                                                        </span>
-                                                    </c:when>
-                                                    <c:when test="${receiver.medicalUrgency == 'URGENT'}">
-                                                        <span class="badge urgency-badge bg-warning text-dark">
-                                                            <i class="fas fa-exclamation-circle me-1"></i>URGENT
-                                                        </span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge urgency-badge bg-info">
-                                                            <i class="fas fa-info-circle me-1"></i>NORMAL
-                                                        </span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td class="fw-semibold"><c:out value="${receiver.cin}" /></td>
-                                            <td class="fw-semibold"><c:out value="${receiver.fullName}" /></td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${not empty receiver.phone}">
-                                                        <c:out value="${receiver.phone}" />
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="text-muted">Non renseigné</span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-light text-dark">${receiver.age} ans</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge blood-badge bg-danger">
-                                                        ${receiver.bloodGroup.displayName}
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <c:choose>
-                                                    <c:when test="${receiver.status == 'SATISFAIT'}">
-                                                        <span class="badge bg-success">
-                                                            <i class="fas fa-check me-1"></i>SATISFAIT
-                                                        </span>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        <span class="badge bg-secondary">
-                                                            <i class="fas fa-clock me-1"></i>EN ATTENTE
-                                                        </span>
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="progress flex-grow-1 me-2" style="width: 100px;">
-                                                        <div class="progress-bar
-                                                            <c:choose>
-                                                                <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">bg-danger</c:when>
-                                                                <c:when test="${receiver.medicalUrgency == 'URGENT'}">bg-warning</c:when>
-                                                                <c:otherwise>bg-info</c:otherwise>
-                                                            </c:choose>"
-                                                             style="width: ${(receiver.currentDonationCount / receiver.requiredDonationCount) * 100}%">
-                                                        </div>
-                                                    </div>
-                                                    <small class="text-muted fw-semibold">
-                                                            ${receiver.currentDonationCount}/${receiver.requiredDonationCount}
-                                                    </small>
-                                                </div>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="btn-group btn-group-sm">
-                                                    <a href="${pageContext.request.contextPath}/receivers?action=edit&id=${receiver.id}"
-                                                       class="btn btn-outline-primary" title="Modifier">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a href="${pageContext.request.contextPath}/receivers?action=delete&id=${receiver.id}"
-                                                       class="btn btn-outline-danger"
-                                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce receveur?')"
-                                                       title="Supprimer">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </c:forEach>
-                                    </tbody>
-                                </table>
-                            </div>
-
-
-                            <div class="p-4 border-top bg-light">
-                                <div class="row text-center">
-                                    <div class="col-md-3">
-                                        <h5 class="text-danger mb-1 fw-bold">${receivers.size()}</h5>
-                                        <small class="text-muted">Total Receveurs</small>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h5 class="text-success mb-1 fw-bold">
-                                            <c:set var="satisfiedCount" value="0" />
-                                            <c:forEach var="receiver" items="${receivers}">
-                                                <c:if test="${receiver.status == 'SATISFAIT'}">
-                                                    <c:set var="satisfiedCount" value="${satisfiedCount + 1}" />
-                                                </c:if>
-                                            </c:forEach>
-                                                ${satisfiedCount}
-                                        </h5>
-                                        <small class="text-muted">Satisfaits</small>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h5 class="text-warning mb-1 fw-bold">
-                                            <c:set var="waitingCount" value="0" />
-                                            <c:forEach var="receiver" items="${receivers}">
-                                                <c:if test="${receiver.status == 'EN_ATTENTE'}">
-                                                    <c:set var="waitingCount" value="${waitingCount + 1}" />
-                                                </c:if>
-                                            </c:forEach>
-                                                ${waitingCount}
-                                        </h5>
-                                        <small class="text-muted">En Attente</small>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h5 class="text-info mb-1 fw-bold">
-                                            <c:set var="totalNeeded" value="0" />
-                                            <c:forEach var="receiver" items="${receivers}">
-                                                <c:set var="totalNeeded" value="${totalNeeded + receiver.requiredDonationCount}" />
-                                            </c:forEach>
-                                                ${totalNeeded}
-                                        </h5>
-                                        <small class="text-muted">Poches Nécessaires</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </c:otherwise>
-            </c:choose>
-        </main>
+            </c:when>
+            <c:otherwise>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nom Complet</th>
+                        <th>CIN</th>
+                        <th>Âge</th>
+                        <th>Groupe Sanguin</th>
+                        <th>Urgence</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="receiver" items="${receivers}">
+                        <tr>
+                            <td><strong>${receiver.fullName}</strong></td>
+                            <td>${receiver.cin}</td>
+                            <td>${receiver.age} ans</td>
+                            <td>
+                                <span class="badge badge-red">${receiver.bloodGroup.displayName}</span>
+                            </td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">
+                                        <span class="badge" style="background-color: #fee2e2; color: #dc2626;">CRITIQUE</span>
+                                    </c:when>
+                                    <c:when test="${receiver.medicalUrgency == 'URGENT'}">
+                                        <span class="badge" style="background-color: #fed7aa; color: #ea580c;">URGENT</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span class="badge badge-gray">NORMAL</span>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td>
+                                        <span class="badge ${receiver.status == 'SATISFAIT' ? 'badge-green' : 'badge-gray'}">
+                                                ${receiver.status}
+                                        </span>
+                            </td>
+                            <td>
+                                <a href="${pageContext.request.contextPath}/receivers?action=edit&id=${receiver.id}"
+                                   class="btn btn-sm btn-secondary">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form method="post" action="${pageContext.request.contextPath}/receivers"
+                                      style="display: inline;">
+                                    <input type="hidden" name="action" value="delete">
+                                    <input type="hidden" name="id" value="${receiver.id}">
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Supprimer ce receveur?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+            </c:otherwise>
+        </c:choose>
     </div>
 </div>
 

@@ -9,361 +9,365 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background-color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
         }
 
-        /* Modern sidebar with red gradient */
         .sidebar {
-            min-height: 100vh;
-            background: linear-gradient(180deg, #dc3545 0%, #c82333 100%);
-            box-shadow: 2px 0 10px rgba(220, 53, 69, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 260px;
+            background-color: #dc2626;
+            padding: 0;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
         }
 
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.9);
+        .sidebar-header {
+            padding: 32px 24px;
+            background-color: #b91c1c;
+            text-align: center;
+        }
+
+        .logo {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 700;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .logo i {
+            font-size: 32px;
+        }
+
+        .nav-menu {
+            padding: 24px 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             padding: 14px 24px;
-            margin: 6px 12px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.2s ease;
             font-weight: 500;
+            border-left: 4px solid transparent;
         }
 
-        .sidebar .nav-link:hover {
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border-left-color: #ffffff;
+        }
+
+        .nav-link.active {
             background-color: rgba(255, 255, 255, 0.15);
             color: #ffffff;
-            transform: translateX(5px);
+            border-left-color: #ffffff;
         }
 
-        .sidebar .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.25);
-            color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .nav-link i {
+            width: 20px;
+            text-align: center;
         }
 
-        .sidebar h4 {
-            padding: 24px 0;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-            margin-bottom: 20px;
-        }
-
-        /* Clean white main content */
         .main-content {
-            background-color: #f8f9fa;
+            margin-left: 260px;
+            padding: 40px;
             min-height: 100vh;
-            padding: 30px;
         }
 
-        /* Modern card design */
-        .card {
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
             border: none;
-            border-radius: 16px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-            background: #ffffff;
-            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* Donor info card with green gradient */
-        .donor-info {
-            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+        .btn-primary {
+            background-color: #dc2626;
             color: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 16px rgba(40, 167, 69, 0.3);
         }
 
-        /* Compatibility cards with hover effect */
-        .compatibility-card {
-            border: 2px solid #f0f0f0;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            background: #ffffff;
+        .btn-primary:hover {
+            background-color: #b91c1c;
+            transform: translateY(-2px);
         }
 
-        .compatibility-card:hover {
-            border-color: #dc3545;
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.15);
-        }
-
-        .card-header {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-            border: none;
-            padding: 20px 24px;
-        }
-
-        .bg-info {
-            background: linear-gradient(135deg, #17a2b8 0%, #138496 100%) !important;
-        }
-
-        /* Modern progress bars */
-        .progress {
-            height: 12px;
-            border-radius: 10px;
-            background-color: #f0f0f0;
-        }
-
-        .progress-bar {
-            border-radius: 10px;
-        }
-
-        /* Red-themed badges */
-        .badge {
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        /* Red-themed buttons */
         .btn-secondary {
-            background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
-            border: none;
-            padding: 12px 28px;
-            border-radius: 10px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            background-color: #f3f4f6;
+            color: #1a1a1a;
         }
 
         .btn-secondary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(108, 117, 125, 0.3);
+            background-color: #e5e7eb;
         }
 
-        .btn-danger {
-            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        .donor-info {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            background-color: #3b82f6;
+            color: white;
+            border-radius: 12px 12px 0 0;
+            padding: 20px;
             font-weight: 600;
-            transition: all 0.3s ease;
         }
 
-        .btn-danger:hover {
+        .card-body {
+            padding: 24px;
+        }
+
+        .receiver-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .receiver-card:hover {
+            border-color: #dc2626;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(220, 53, 69, 0.3);
         }
 
-        /* Page header with red border */
-        .page-header {
-            border-bottom: 3px solid #dc3545;
-            padding-bottom: 20px;
-            margin-bottom: 30px;
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
         }
 
-        .page-header h1 {
-            color: #2c3e50;
-            font-weight: 700;
+        .progress {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e5e7eb;
+        }
+
+        .progress-bar {
+            background-color: #3b82f6;
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            border-left: 4px solid;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            border-color: #059669;
+            color: #065f46;
+        }
+
+        .alert-danger {
+            background-color: #fee2e2;
+            border-color: #dc2626;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            color: #e5e7eb;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
         }
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
+<div class="sidebar">
+    <div class="sidebar-header">
+        <a href="${pageContext.request.contextPath}/home" class="logo">
+            <i class="fas fa-tint"></i>
+            <span>Blood Bank</span>
+        </a>
+    </div>
+    <nav class="nav-menu">
+        <a href="${pageContext.request.contextPath}/home" class="nav-link">
+            <i class="fas fa-home"></i>
+            <span>Accueil</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/donors" class="nav-link">
+            <i class="fas fa-user-plus"></i>
+            <span>Donneurs</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/receivers" class="nav-link">
+            <i class="fas fa-user-injured"></i>
+            <span>Receveurs</span>
+        </a>
+        <a href="${pageContext.request.contextPath}/matching?action=showMatching" class="nav-link active">
+            <i class="fas fa-handshake"></i>
+            <span>Matching</span>
+        </a>
+    </nav>
+</div>
 
-        <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
-            <div class="position-sticky pt-3">
-                <h4 class="text-white text-center">
-                    <i class="fas fa-tint me-2"></i>Blood Bank
-                </h4>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/home">
-                            <i class="fas fa-home me-2"></i>Accueil
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/donors">
-                            <i class="fas fa-user-plus me-2"></i>Donneurs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/receivers">
-                            <i class="fas fa-user-injured me-2"></i>Receveurs
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="${pageContext.request.contextPath}/matching?action=showMatching">
-                            <i class="fas fa-handshake me-2"></i>Matching
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+<div class="main-content">
+    <div class="page-header">
+        <h1 class="page-title">
+            <i class="fas fa-user-injured me-2"></i>
+            Receveurs Compatibles
+        </h1>
+        <a href="${pageContext.request.contextPath}/matching?action=showMatching" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Retour
+        </a>
+    </div>
 
+    <c:if test="${not empty success}">
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle me-2"></i>
+                ${success}
+        </div>
+    </c:if>
+    <c:if test="${not empty error}">
+        <div class="alert alert-danger">
+            <i class="fas fa-exclamation-circle me-2"></i>
+                ${error}
+        </div>
+    </c:if>
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
-            <div class="d-flex justify-content-between align-items-center page-header">
-                <h1 class="h2 mb-0">Receveurs Compatibles</h1>
-                <a href="${pageContext.request.contextPath}/matching?action=showMatching" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-2"></i>Retour au Matching
-                </a>
-            </div>
+    <div class="donor-info">
+        <h4>${donor.fullName}</h4>
+        <p class="mb-1">Groupe: <strong>${donor.bloodGroup.displayName}</strong> | Poids: <strong>${donor.weight} kg</strong></p>
+        <p class="mb-0">Statut: <strong>${donor.status}</strong></p>
+    </div>
 
-
-            <c:if test="${not empty success}">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>${success}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            </c:if>
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>${error}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                </div>
-            </c:if>
-
-
-            <div class="card donor-info mb-4">
-                <div class="card-body p-4">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <h4 class="card-title mb-3 fw-bold">${donor.fullName}</h4>
-                            <p class="card-text mb-2">
-                                <strong>CIN:</strong> ${donor.cin} |
-                                <strong>Âge:</strong> ${donor.age} ans |
-                                <strong>Téléphone:</strong> ${donor.phone}
-                            </p>
-                            <p class="card-text mb-2">
-                                <span class="badge bg-light text-dark me-2">Groupe Sanguin: ${donor.bloodGroup.displayName}</span>
-                                <span class="badge bg-light text-dark">Poids: ${donor.weight} kg</span>
-                            </p>
-                            <p class="card-text mb-0">
-                                <span class="badge ${donor.status == 'DISPONIBLE' ? 'bg-success' : 'bg-secondary'}">
-                                    ${donor.status}
-                                </span>
-                            </p>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <i class="fas fa-user-plus fa-4x mb-2" style="opacity: 0.3;"></i>
-                            <p class="mb-0 fw-semibold">Donneur Disponible</p>
-                        </div>
+    <div class="card">
+        <div class="card-header">
+            <i class="fas fa-user-injured me-2"></i>
+            Receveurs Compatibles (${compatibleReceivers.size()})
+        </div>
+        <div class="card-body">
+            <c:choose>
+                <c:when test="${empty compatibleReceivers}">
+                    <div class="empty-state">
+                        <i class="fas fa-users-slash"></i>
+                        <h3>Aucun receveur compatible</h3>
+                        <p>Aucun receveur en attente pour ce groupe sanguin</p>
                     </div>
-                </div>
-            </div>
-
-
-            <div class="card">
-                <div class="card-header text-white">
-                    <h5 class="mb-0">
-                        <i class="fas fa-user-injured me-2"></i>
-                        Receveurs Compatibles (${compatibleReceivers.size()})
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <c:choose>
-                        <c:when test="${empty compatibleReceivers}">
-                            <div class="text-center text-muted py-5">
-                                <i class="fas fa-users-slash fa-3x mb-3"></i>
-                                <h4>Aucun receveur compatible trouvé</h4>
-                                <p class="mb-3">Aucun receveur en attente n'est compatible avec le groupe sanguin ${donor.bloodGroup.displayName}</p>
-                                <a href="${pageContext.request.contextPath}/matching?action=showMatching" class="btn btn-secondary">
-                                    <i class="fas fa-arrow-left me-2"></i>Retour au Matching
-                                </a>
-                            </div>
-                        </c:when>
-                        <c:otherwise>
+                </c:when>
+                <c:otherwise>
+                    <c:forEach var="receiver" items="${compatibleReceivers}">
+                        <div class="receiver-card">
                             <div class="row">
-                                <c:forEach var="receiver" items="${compatibleReceivers}">
-                                    <div class="col-md-6 mb-4">
-                                        <div class="card compatibility-card h-100">
-                                            <div class="card-body">
-                                                <div class="d-flex justify-content-between align-items-start mb-3">
-                                                    <h6 class="card-title mb-0 fw-bold">${receiver.fullName}</h6>
-                                                    <span class="badge bg-danger">Compatible</span>
-                                                </div>
-
-                                                <div class="row mb-3">
-                                                    <div class="col-6">
-                                                        <small class="text-muted">CIN</small>
-                                                        <p class="mb-1 fw-semibold">${receiver.cin}</p>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <small class="text-muted">Âge</small>
-                                                        <p class="mb-1 fw-semibold">${receiver.age} ans</p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-3">
-                                                    <div class="col-6">
-                                                        <small class="text-muted">Groupe Sanguin</small>
-                                                        <p class="mb-1">
-                                                            <span class="badge bg-danger">${receiver.bloodGroup.displayName}</span>
-                                                        </p>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <small class="text-muted">Urgence</small>
-                                                        <p class="mb-1">
-                                                            <span class="badge
-                                                                <c:choose>
-                                                                    <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">bg-danger</c:when>
-                                                                    <c:when test="${receiver.medicalUrgency == 'URGENT'}">bg-warning text-dark</c:when>
-                                                                    <c:otherwise>bg-info</c:otherwise>
-                                                                </c:choose>">
-                                                                    ${receiver.medicalUrgency}
-                                                            </span>
-                                                        </p>
-                                                    </div>
-                                                </div>
-
-                                                <div class="mb-3">
-                                                    <small class="text-muted">Progression</small>
-                                                    <div class="progress mt-1">
-                                                        <div class="progress-bar
-                                                            <c:choose>
-                                                                <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">bg-danger</c:when>
-                                                                <c:when test="${receiver.medicalUrgency == 'URGENT'}">bg-warning</c:when>
-                                                                <c:otherwise>bg-info</c:otherwise>
-                                                            </c:choose>"
-                                                             style="width: ${(receiver.currentDonationCount / receiver.requiredDonationCount) * 100}%">
-                                                        </div>
-                                                    </div>
-                                                    <small class="text-muted">${receiver.currentDonationCount}/${receiver.requiredDonationCount} poches</small>
-                                                </div>
-
-                                                Association Button
-                                                <form method="post" action="${pageContext.request.contextPath}/matching"
-                                                      class="mt-auto">
-                                                    <input type="hidden" name="action" value="createDonation">
-                                                    <input type="hidden" name="donorId" value="${donor.id}">
-                                                    <input type="hidden" name="receiverId" value="${receiver.id}">
-                                                    <button type="submit" class="btn btn-danger w-100"
-                                                            onclick="return confirm('Associer ${donor.fullName} avec ${receiver.fullName}?')">
-                                                        <i class="fas fa-handshake me-2"></i>Associer
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
+                                <div class="col-md-8">
+                                    <h6>${receiver.fullName}</h6>
+                                    <p class="mb-2">
+                                        <span class="badge" style="background-color: #dbeafe; color: #1e40af;">${receiver.bloodGroup.displayName}</span>
+                                        <span class="badge
+                                                <c:choose>
+                                                    <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">badge-danger</c:when>
+                                                    <c:when test="${receiver.medicalUrgency == 'URGENT'}">badge-warning</c:when>
+                                                    <c:otherwise>badge-info</c:otherwise>
+                                                </c:choose>"
+                                              style="<c:choose>
+                                              <c:when test="${receiver.medicalUrgency == 'CRITIQUE'}">background-color: #fee2e2; color: #dc2626;</c:when>
+                                              <c:when test="${receiver.medicalUrgency == 'URGENT'}">background-color: #fed7aa; color: #ea580c;</c:when>
+                                              <c:otherwise>background-color: #dbeafe; color: #1e40af;</c:otherwise>
+                                                      </c:choose>">
+                                                ${receiver.medicalUrgency}
+                                        </span>
+                                    </p>
+                                    <div class="progress mb-2">
+                                        <div class="progress-bar" style="width: ${(receiver.currentDonationCount / receiver.requiredDonationCount) * 100}%"></div>
                                     </div>
-                                </c:forEach>
+                                    <small class="text-muted">${receiver.currentDonationCount}/${receiver.requiredDonationCount} poches</small>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <form method="post" action="${pageContext.request.contextPath}/matching">
+                                        <input type="hidden" name="action" value="createDonation">
+                                        <input type="hidden" name="donorId" value="${donor.id}">
+                                        <input type="hidden" name="receiverId" value="${receiver.id}">
+                                        <button type="submit" class="btn btn-primary btn-sm"
+                                                onclick="return confirm('Associer ce receveur?')">
+                                            <i class="fas fa-handshake"></i> Associer
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
-                        </c:otherwise>
-                    </c:choose>
-                </div>
-            </div>
-
-
-            <div class="card mt-4">
-                <div class="card-header bg-info text-white">
-                    <h6 class="mb-0">
-                        <i class="fas fa-info-circle me-2"></i>
-                        Informations de Compatibilité
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <p class="mb-2">
-                        <strong>Donneur:</strong> Groupe ${donor.bloodGroup.displayName}
-                    </p>
-                    <p class="mb-0">
-                        <strong>Receveurs compatibles:</strong>
-                        <c:forEach var="compatibleGroup" items="${compatibleReceivers}" varStatus="status">
-                            ${compatibleGroup.bloodGroup.displayName}<c:if test="${!status.last}">, </c:if>
-                        </c:forEach>
-                    </p>
-                </div>
-            </div>
-        </main>
+                        </div>
+                    </c:forEach>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </div>
 </div>
 
