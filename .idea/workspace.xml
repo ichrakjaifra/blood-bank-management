@@ -10,11 +10,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="37899dd6-5617-48eb-87c0-7d7e399585e5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bloodbank/util/TestConnection.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bloodbank/controller/DonorServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bloodbank/controller/DonorServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bloodbank/controller/MatchingServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bloodbank/controller/MatchingServlet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bloodbank/controller/ReceiverServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bloodbank/controller/ReceiverServlet.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -361,7 +357,7 @@
       <workItem from="1760542611575" duration="3035000" />
       <workItem from="1760602064697" duration="43614000" />
       <workItem from="1760879619715" duration="818000" />
-      <workItem from="1760883299610" duration="303000" />
+      <workItem from="1760883299610" duration="5861000" />
     </task>
     <task id="LOCAL-00001">
       <option name="closed" value="true" />
