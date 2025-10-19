@@ -89,23 +89,30 @@ public class DonationService {
         return donationDAO.findByReceiver(receiver);
     }
 
-    public void cancelDonation(Long donationId) {
+    /*public void cancelDonation(Long donationId) {
         Optional<Donation> donationOpt = donationDAO.findById(donationId);
         if (donationOpt.isPresent()) {
             Donation donation = donationOpt.get();
             donation.setIsActive(false);
 
-            // Réactiver le donneur
+
             Donor donor = donation.getDonor();
             donor.setStatus(DonorStatus.DISPONIBLE);
 
-            // Mettre à jour le receveur
+
             Receiver receiver = donation.getReceiver();
             receiver.updateStatus();
 
             donationDAO.save(donation);
             donorDAO.save(donor);
             receiverDAO.save(receiver);
+        }
+    }*/
+    public void cancelDonation(Long donationId) {
+
+        boolean success = donationDAO.cancelDonationWithAllAssociations(donationId);
+        if (!success) {
+            throw new IllegalArgumentException("Donation non trouvée avec l'ID: " + donationId);
         }
     }
 

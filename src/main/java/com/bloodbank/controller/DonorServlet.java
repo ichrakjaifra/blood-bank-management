@@ -33,8 +33,6 @@ public class DonorServlet extends HttpServlet {
                 showCreateForm(request, response);
             } else if ("edit".equals(action)) {
                 showEditForm(request, response);
-            } else if ("delete".equals(action)) {
-                deleteDonor(request, response);
             } else {
                 listDonors(request, response);
             }
@@ -57,6 +55,8 @@ public class DonorServlet extends HttpServlet {
                 createDonor(request, response);
             } else if ("update".equals(action)) {
                 updateDonor(request, response);
+            } else if ("delete".equals(action)) {
+                deleteDonor(request, response);
             } else {
                 listDonors(request, response);
             }

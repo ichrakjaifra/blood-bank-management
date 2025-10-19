@@ -3,40 +3,48 @@ package com.bloodbank.util;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class JPAUtil {
-    private static final Logger logger = LoggerFactory.getLogger(JPAUtil.class);
     private static final String PERSISTENCE_UNIT_NAME = "bloodbank_pu";
     private static EntityManagerFactory factory;
 
     static {
         try {
-            logger.info("Initializing EntityManagerFactory for PU: {}", PERSISTENCE_UNIT_NAME);
-            factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);
-            logger.info("EntityManagerFactory initialized successfully");
+            Properties props = new Properties();
+
+            // Use classloader instead of absolute path — works inside JAR/WAR
+            try (InputStream input = JPAUtil.class.getClassLoader()
+                    .getResourceAsStream("config.properties")) {
+                if (input == null) {
+                    throw new RuntimeException("config.properties not found in classpath!");
+                }
+                props.load(input);
+            }
+
+            Map<String, String> dbSettings = new HashMap<>();
+            dbSettings.put("jakarta.persistence.jdbc.url", props.getProperty("DB_URL"));
+            dbSettings.put("jakarta.persistence.jdbc.user", props.getProperty("DB_USER"));
+            dbSettings.put("jakarta.persistence.jdbc.password", props.getProperty("DB_PASSWORD"));
+
+            factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME, dbSettings);
+            System.out.println(" Database connection initialized successfully.");
         } catch (Exception e) {
-            logger.error("Failed to initialize EntityManagerFactory", e);
-            throw new ExceptionInInitializerError("Failed to create EntityManagerFactory: " + e.getMessage());
+            e.printStackTrace();
+            throw new ExceptionInInitializerError(" Failed to create EntityManagerFactory!");
         }
     }
 
     public static EntityManager getEntityManager() {
-        if (factory == null) {
-            throw new IllegalStateException("EntityManagerFactory is not initialized");
-        }
         return factory.createEntityManager();
-    }
-
-    public static EntityManagerFactory getEntityManagerFactory() {
-        return factory;
     }
 
     public static void closeFactory() {
         if (factory != null && factory.isOpen()) {
             factory.close();
-            factory = null;
         }
     }
 }
