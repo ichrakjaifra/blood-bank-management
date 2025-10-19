@@ -32,8 +32,6 @@ public class ReceiverServlet extends HttpServlet {
             showCreateForm(request, response);
         } else if ("edit".equals(action)) {
             showEditForm(request, response);
-        } else if ("delete".equals(action)) {
-            deleteReceiver(request, response);
         } else {
             listReceivers(request, response);
         }
@@ -45,10 +43,26 @@ public class ReceiverServlet extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        if ("create".equals(action)) {
-            createReceiver(request, response);
-        } else if ("update".equals(action)) {
-            updateReceiver(request, response);
+        try {
+            if ("create".equals(action)) {
+                createReceiver(request, response);
+            } else if ("update".equals(action)) {
+                updateReceiver(request, response);
+            } else if ("delete".equals(action)) {
+                deleteReceiver(request, response); 
+            } else {
+                listReceivers(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Erreur: " + e.getMessage());
+            if ("create".equals(action)) {
+                showCreateForm(request, response);
+            } else if ("update".equals(action)) {
+                showEditForm(request, response);
+            } else {
+                listReceivers(request, response);
+            }
         }
     }
 
