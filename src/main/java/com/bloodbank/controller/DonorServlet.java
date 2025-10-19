@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -76,6 +77,21 @@ public class DonorServlet extends HttpServlet {
     private void listDonors(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            // NETTOYAGE DES MESSAGES DE SESSION
+            HttpSession session = request.getSession();
+            String success = (String) session.getAttribute("success");
+            String error = (String) session.getAttribute("error");
+
+            // Transférer les messages de la session vers la request
+            if (success != null) {
+                request.setAttribute("success", success);
+                session.removeAttribute("success"); // Supprimer de la session
+            }
+            if (error != null) {
+                request.setAttribute("error", error);
+                session.removeAttribute("error"); // Supprimer de la session
+            }
+
             List<Donor> donors = donorService.findAll();
             request.setAttribute("donors", donors);
             request.setAttribute("bloodGroups", BloodGroup.values());

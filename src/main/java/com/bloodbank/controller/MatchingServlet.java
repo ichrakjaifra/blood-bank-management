@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -71,6 +72,21 @@ public class MatchingServlet extends HttpServlet {
     private void showMatchingInterface(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // NETTOYAGE DES MESSAGES DE SESSION
+        HttpSession session = request.getSession();
+        String success = (String) session.getAttribute("success");
+        String error = (String) session.getAttribute("error");
+
+        // Transférer les messages de la session vers la request
+        if (success != null) {
+            request.setAttribute("success", success);
+            session.removeAttribute("success"); // Supprimer de la session
+        }
+        if (error != null) {
+            request.setAttribute("error", error);
+            session.removeAttribute("error"); // Supprimer de la session
+        }
+
         List<Donor> availableDonors = donorService.findAvailableDonors();
         List<Receiver> waitingReceivers = receiverService.findWaitingReceivers();
         List<Donation> activeDonations = donationService.findAllActiveDonations();
@@ -84,6 +100,20 @@ public class MatchingServlet extends HttpServlet {
 
     private void findCompatibleDonors(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // NETTOYAGE DES MESSAGES DE SESSION
+        HttpSession session = request.getSession();
+        String success = (String) session.getAttribute("success");
+        String error = (String) session.getAttribute("error");
+
+        if (success != null) {
+            request.setAttribute("success", success);
+            session.removeAttribute("success");
+        }
+        if (error != null) {
+            request.setAttribute("error", error);
+            session.removeAttribute("error");
+        }
 
         Long receiverId = Long.parseLong(request.getParameter("receiverId"));
         Receiver receiver = receiverService.findById(receiverId)
@@ -99,6 +129,20 @@ public class MatchingServlet extends HttpServlet {
     private void findCompatibleReceivers(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // NETTOYAGE DES MESSAGES DE SESSION
+        HttpSession session = request.getSession();
+        String success = (String) session.getAttribute("success");
+        String error = (String) session.getAttribute("error");
+
+        if (success != null) {
+            request.setAttribute("success", success);
+            session.removeAttribute("success");
+        }
+        if (error != null) {
+            request.setAttribute("error", error);
+            session.removeAttribute("error");
+        }
+
         Long donorId = Long.parseLong(request.getParameter("donorId"));
         Donor donor = donorService.findById(donorId)
                 .orElseThrow(() -> new ServletException("Donneur non trouvé"));
@@ -112,6 +156,20 @@ public class MatchingServlet extends HttpServlet {
 
     private void listAllDonations(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        // NETTOYAGE DES MESSAGES DE SESSION
+        HttpSession session = request.getSession();
+        String success = (String) session.getAttribute("success");
+        String error = (String) session.getAttribute("error");
+
+        if (success != null) {
+            request.setAttribute("success", success);
+            session.removeAttribute("success");
+        }
+        if (error != null) {
+            request.setAttribute("error", error);
+            session.removeAttribute("error");
+        }
 
         List<Donation> donations = donationService.findAllActiveDonations();
         request.setAttribute("donations", donations);

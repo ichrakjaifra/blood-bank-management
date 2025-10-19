@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,11 +29,17 @@ public class ReceiverServlet extends HttpServlet {
 
         String action = request.getParameter("action");
 
-        if ("new".equals(action)) {
-            showCreateForm(request, response);
-        } else if ("edit".equals(action)) {
-            showEditForm(request, response);
-        } else {
+        try {
+            if ("new".equals(action)) {
+                showCreateForm(request, response);
+            } else if ("edit".equals(action)) {
+                showEditForm(request, response);
+            } else {
+                listReceivers(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Erreur: " + e.getMessage());
             listReceivers(request, response);
         }
     }
@@ -49,7 +56,7 @@ public class ReceiverServlet extends HttpServlet {
             } else if ("update".equals(action)) {
                 updateReceiver(request, response);
             } else if ("delete".equals(action)) {
-                deleteReceiver(request, response); 
+                deleteReceiver(request, response);
             } else {
                 listReceivers(request, response);
             }
@@ -69,22 +76,27 @@ public class ReceiverServlet extends HttpServlet {
     private void listReceivers(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // NETTOYAGE DES MESSAGES DE SESSION
+        HttpSession session = request.getSession();
+        String success = (String) session.getAttribute("success");
+        String error = (String) session.getAttribute("error");
+
+        // Transférer les messages de la session vers la request
+        if (success != null) {
+            request.setAttribute("success", success);
+            session.removeAttribute("success"); // Supprimer de la session
+        }
+        if (error != null) {
+            request.setAttribute("error", error);
+            session.removeAttribute("error"); // Supprimer de la session
+        }
+
         List<Receiver> receivers = receiverService.findAllByPriority();
         request.setAttribute("receivers", receivers);
         request.setAttribute("bloodGroups", BloodGroup.values());
         request.setAttribute("medicalUrgencies", MedicalUrgency.values());
         request.getRequestDispatcher("/WEB-INF/views/receiver/list.jsp").forward(request, response);
     }
-
-    /*private void listReceivers(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        List<Receiver> receivers = receiverService.findAll();
-        request.setAttribute("receivers", receivers);
-        request.setAttribute("bloodGroups", BloodGroup.values());
-        request.setAttribute("medicalUrgencies", MedicalUrgency.values());
-        request.getRequestDispatcher("/WEB-INF/views/receiver/list.jsp").forward(request, response);
-    }*/
 
     private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
