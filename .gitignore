@@ -4,8 +4,7 @@ target/
 !**/src/test/**/target/
 .kotlin
 
-# Ignore JPA persistence configuration
-src/main/resources/META-INF/persistence.xml
+src/main/resources/config.properties
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
