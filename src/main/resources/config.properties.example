@@ -1,0 +1,4 @@
+# config.properties.example
+DB_URL=jdbc:postgresql://localhost:5432/bloodbank_db_example
+DB_USER=user_example
+DB_PASSWORD=secret_password_here
