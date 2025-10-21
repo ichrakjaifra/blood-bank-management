@@ -183,6 +183,7 @@ Suite aux défis rencontrés par les centres de transfusion sanguine dans la ges
    git clone [https://github.com/ichrakjaifra/blood-bank-management.git]
    cd blood-bank-system
 ```
+```
 2. **Configurer la base de données**
 
 ```
@@ -209,15 +210,17 @@ DB_PASSWORD=votre_mot_de_passe
 ```
 mvn clean compile
 ```
-4. **Déployer sur Tomcat**
+4. Déployer sur Tomcat
 -Copier le fichier target/blood-bank.war dans le dossier webapps de Tomcat
 -Démarrer le serveur Tomcat
 
 5. **Accéder à l'application**
+
 ```
 http://localhost:8080/blood-bank
 ```
-
+```
+````
 ## 📸 Captures d'Écran
 ### Page d'Accueil
 ![logo](images/1.png)
