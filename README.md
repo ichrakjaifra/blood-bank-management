@@ -1,6 +1,6 @@
 # 🩸 Système de Gestion de Banque de Sang
 
-##🎯 Description du Projet
+## 🎯 Description du Projet
 
 Ce projet consiste en une application web monolithique JEE pour la gestion complète d'une banque de sang. L'application permet de gérer les donneurs et receveurs de sang avec un système automatique de matching basé sur les compatibilités sanguines et les urgences médicales.
 
@@ -241,6 +241,4 @@ http://localhost:8080/blood-bank
 ## Diagramme de Classe
 ![logo](images/d.png)
 
-### 🎯 Tableau de Bord JIRA
-🔗 **[Accéder au projet sur JIRA](https://ichrakjaifra-1758033929972.atlassian.net/jira/software/c/projects/SDGBDS/boards/102?atlOrigin=eyJpIjoiMTAxZTQxNGRhMTM2NDQ3ZGFhNGFkNGYxNWM3ODE4OGEiLCJwIjoiaiJ9)**
 
